@@ -42,6 +42,9 @@ export function Hero() {
   const contentY = useTransform(scrollYProgress, [0, 1], [0, 140]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
   const blobsY = useTransform(scrollYProgress, [0, 1], [0, -120]);
+  // The tufted underline weaves (full at the top) and unravels from the right
+  // as you scroll through the hero — and re-weaves when you scroll back up.
+  const underlineScale = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   // Mouse-driven parallax for the blobs.
   const mx = useMotionValue(0);
