@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fredoka", "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --font-street: "Bebas Neue", "Fredoka", ui-sans-serif, sans-serif;
+
+  --color-candy-pink: #ff2e7a;
+  --color-candy-pink-light: #ffd0e2;
+  --color-coral: #ff6b35;
+  --color-coral-light: #ffe8db;
+  --color-sun: #ffd60a;
+  --color-sun-light: #fff9d4;
+  --color-ocean: #00b4d8;
+  --color-ocean-light: #d4f5fc;
+  --color-lime: #34d399;
+  --color-lime-light: #d1fae5;
+  --color-grape: #a855f7;
+  --color-grape-light: #ede2fd;
+  --color-berry: #ec4899;
+  --color-berry-light: #fce7f3;
+  --color-sky: #60a5fa;
+  --color-sky-light: #e0edfe;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-neutral-800;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+  }
+
+  /* Offset anchor targets so the fixed navbar doesn't cover section titles. */
+  section[id] {
+    scroll-margin-top: 96px;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .font-street {
+    font-family: var(--font-street);
+  }
+
+  /* Gritty film-grain noise overlay for the street-style header. */
+  .bg-grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  }
+
+  /* Multi-color neon glow used on the floating street header. */
+  .shadow-neon {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+      0 10px 40px -8px rgba(255, 46, 122, 0.45),
+      0 6px 22px -6px rgba(0, 180, 216, 0.4);
+  }
+
+  /* Animated spray-paint underline for active nav tags. */
+  .spray-underline::after {
+    content: "";
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    bottom: -2px;
+    height: 4px;
+    border-radius: 99px;
+    background: linear-gradient(90deg, #ff2e7a, #ffd60a, #00b4d8);
+    box-shadow: 0 0 8px rgba(255, 214, 10, 0.7);
+  }
+
+  .shadow-candy {
+    box-shadow: 0 8px 30px rgba(255, 46, 122, 0.2);
+  }
+  .shadow-coral {
+    box-shadow: 0 8px 30px rgba(255, 107, 53, 0.2);
+  }
+  .shadow-ocean {
+    box-shadow: 0 8px 30px rgba(0, 180, 216, 0.2);
+  }
+  .shadow-lime {
+    box-shadow: 0 8px 30px rgba(52, 211, 153, 0.2);
+  }
+  .shadow-sun {
+    box-shadow: 0 8px 30px rgba(255, 214, 10, 0.25);
+  }
+  .shadow-grape {
+    box-shadow: 0 8px 30px rgba(168, 85, 247, 0.2);
+  }
+}
+
+/* Tufted logo: ripple the fuzzy texture on hover via the animated SVG filter. */
+.logo-tuft {
+  transition: filter 0.4s ease;
+  will-change: filter;
+}
+.logo-tuft-trigger:hover .logo-tuft {
+  filter: url(#tuft-fuzz) saturate(1.18) brightness(1.06);
+}
+
+/* Soft variant: gentle slow tuft breathing + warm glow, no harsh shimmer. */
+.logo-soft-trigger:hover .logo-tuft {
+  filter: url(#tuft-soft) drop-shadow(0 8px 22px rgba(255, 46, 122, 0.4))
+    saturate(1.08) brightness(1.04);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-20px) rotate(3deg); }
+  66% { transform: translateY(10px) rotate(-2deg); }
+}
+
+@keyframes splat {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  50% { transform: scale(1.2) rotate(15deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 0.9; }
+}
+
+@keyframes wavy {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pop-in {
+  0% { transform: scale(0); opacity: 0; }
+  80% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes dash {
+  to { stroke-dashoffset: 0; }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-splat {
+  animation: splat 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-pop-in {
+  animation: pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+.wavy-line {
+  position: relative;
+}
+
+.wavy-line::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    #ff2e7a 0px,
+    #ff2e7a 8px,
+    #ff6b35 8px,
+    #ff6b35 16px,
+    #ffd60a 16px,
+    #ffd60a 24px,
+    #34d399 24px,
+    #34d399 32px,
+    #00b4d8 32px,
+    #00b4d8 40px,
+    #a855f7 40px,
+    #a855f7 48px
+  );
+}
