@@ -132,7 +132,7 @@ export function Hero() {
           >
             <a href="#" aria-label="buggy ruggy" className="inline-block">
               <BuggyRuggyLogo
-                variant="soft"
+                variant="breeze"
                 float
                 imgClassName="h-24 sm:h-32 lg:h-40"
               />

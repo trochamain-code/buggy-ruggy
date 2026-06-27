@@ -113,6 +113,12 @@
     saturate(1.08) brightness(1.04);
 }
 
+/* Breeze variant: flowing wind-over-grass ripple + warm glow. */
+.logo-breeze-trigger:hover .logo-tuft {
+  filter: url(#tuft-breeze) drop-shadow(0 10px 26px rgba(52, 211, 153, 0.35))
+    saturate(1.06) brightness(1.03);
+}
+
 @keyframes float {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
   33% { transform: translateY(-20px) rotate(3deg); }

@@ -45,6 +45,44 @@ export function SvgFilters() {
           />
         </filter>
 
+        {/* Breeze — slow, large-scale flowing ripple, like wind over long grass. */}
+        <filter
+          id="tuft-breeze"
+          x="-18%"
+          y="-18%"
+          width="136%"
+          height="136%"
+          colorInterpolationFilters="sRGB"
+        >
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.008 0.014"
+            numOctaves="2"
+            seed="5"
+            result="noise"
+          >
+            <animate
+              attributeName="baseFrequency"
+              dur="5s"
+              values="0.008 0.014; 0.014 0.009; 0.008 0.014"
+              repeatCount="indefinite"
+            />
+            <animate
+              attributeName="seed"
+              dur="7s"
+              values="5; 22; 5"
+              repeatCount="indefinite"
+            />
+          </feTurbulence>
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale="6"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+
         {/* Gentle tuft breathing — soft, slow ripple for the hero logo. */}
         <filter
           id="tuft-soft"
