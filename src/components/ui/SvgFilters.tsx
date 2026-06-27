@@ -79,6 +79,32 @@ export function SvgFilters() {
           />
         </filter>
 
+        {/* Tufted edge — dense fine noise that frays a shape's outline into a
+            fuzzy yarn-pile border. Used for the hero headline underline. */}
+        <filter
+          id="tuft-bar"
+          x="-12%"
+          y="-60%"
+          width="124%"
+          height="220%"
+          colorInterpolationFilters="sRGB"
+        >
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.9 1.05"
+            numOctaves="2"
+            seed="8"
+            result="noise"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale="6"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+
         {/* Gentle tuft breathing — soft, slow ripple for the hero logo. */}
         <filter
           id="tuft-soft"

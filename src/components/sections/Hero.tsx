@@ -146,19 +146,39 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
             className="mt-6 max-w-5xl text-balance text-5xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-8xl"
           >
-            Alfombras que
+            TU ESPACIO,
             <br />
             <span className="relative inline-block">
               <span className="relative z-10 bg-gradient-to-r from-candy-pink via-coral to-sun bg-clip-text text-transparent">
-                pintan sonrisas
+                TUS REGLAS
               </span>
-              <motion.span
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.8, delay: 0.8 }}
-                className="absolute -bottom-1 left-0 h-4 w-full origin-left rounded-full bg-sun/50"
-                style={{ transform: "rotate(-1deg)" }}
-              />
+              {/* Tufted underline — gradient bar frayed into fuzzy yarn pile */}
+              <motion.svg
+                initial={{ scaleX: 0, rotate: -1.5 }}
+                animate={{ scaleX: 1, rotate: -1.5 }}
+                transition={{ duration: 0.7, delay: 0.7, ease: "easeOut" }}
+                viewBox="0 0 320 22"
+                preserveAspectRatio="none"
+                aria-hidden
+                className="absolute -bottom-3 left-0 h-5 w-full origin-left overflow-visible drop-shadow-[0_4px_7px_rgba(255,107,53,0.45)] sm:h-6"
+              >
+                <defs>
+                  <linearGradient id="tuft-underline-grad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#ff2e7a" />
+                    <stop offset="45%" stopColor="#ff6b35" />
+                    <stop offset="100%" stopColor="#ffd60a" />
+                  </linearGradient>
+                </defs>
+                <rect
+                  x="4"
+                  y="3"
+                  width="312"
+                  height="15"
+                  rx="7.5"
+                  fill="url(#tuft-underline-grad)"
+                  filter="url(#tuft-bar)"
+                />
+              </motion.svg>
             </span>
           </motion.h1>
 
