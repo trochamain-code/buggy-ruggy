@@ -54,30 +54,26 @@ export function SvgFilters() {
           height="136%"
           colorInterpolationFilters="sRGB"
         >
+          {/* No seed animation (it pops). Just a very slow, tiny frequency
+              drift so the tuft texture stays alive without crawling. */}
           <feTurbulence
             type="fractalNoise"
-            baseFrequency="0.008 0.014"
+            baseFrequency="0.01 0.013"
             numOctaves="2"
             seed="5"
             result="noise"
           >
             <animate
               attributeName="baseFrequency"
-              dur="5s"
-              values="0.008 0.014; 0.014 0.009; 0.008 0.014"
-              repeatCount="indefinite"
-            />
-            <animate
-              attributeName="seed"
-              dur="7s"
-              values="5; 22; 5"
+              dur="9s"
+              values="0.01 0.013; 0.012 0.011; 0.01 0.013"
               repeatCount="indefinite"
             />
           </feTurbulence>
           <feDisplacementMap
             in="SourceGraphic"
             in2="noise"
-            scale="6"
+            scale="5"
             xChannelSelector="R"
             yChannelSelector="G"
           />
