@@ -21,8 +21,8 @@ export function InfiniteGallery() {
         </span>
         <h2 className="mt-4 font-climate text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
           100+ alfombras{' '}
-          <span className="bg-gradient-to-r from-candy-pink via-coral to-sun bg-clip-text text-transparent">
-            únicas
+          <span className="bg-gradient-to-r from-candy-pink via-coral to-sun bg-clip-text text-transparent tracking-[0.15em]">
+            ÚNICAS
           </span>
         </h2>
       </div>
