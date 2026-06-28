@@ -44,44 +44,61 @@ export function Workshops() {
   const workshopImages = galleryImages.slice(0, workshopEvents.length);
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      const section = sectionRef.current;
-      const track = trackRef.current;
-      const header = headerRef.current;
-      if (!section || !track || !header) return;
+    function initGSAP() {
+      if (window.innerWidth < 640) return;
 
-      const scrollWidth = track.scrollWidth;
-      const viewportWidth = section.offsetWidth;
-      const maxScroll = Math.max(0, scrollWidth - viewportWidth);
+      const ctx = gsap.context(() => {
+        const section = sectionRef.current;
+        const track = trackRef.current;
+        const header = headerRef.current;
+        if (!section || !track || !header) return;
 
-      if (maxScroll === 0) return;
+        const scrollWidth = track.scrollWidth;
+        const viewportWidth = section.offsetWidth;
+        const maxScroll = Math.max(0, scrollWidth - viewportWidth);
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          pin: true,
-          start: "top top",
-          end: () => `+=${maxScroll + 200}`,
-          scrub: 1.5,
-          invalidateOnRefresh: true,
-        },
+        if (maxScroll === 0) return;
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: section,
+            pin: true,
+            start: "top top",
+            end: () => `+=${maxScroll + section.offsetHeight}`,
+            scrub: 1.5,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        tl.to(header, { opacity: 0, y: -30, ease: "none" }, 0).to(
+          track,
+          { x: -maxScroll, ease: "none" },
+          0.15,
+        );
       });
 
-      tl.to(header, { opacity: 0, y: -30, ease: "none" }, 0).to(
-        track,
-        { x: -maxScroll, ease: "none" },
-        0.15,
-      );
-    });
+      return ctx;
+    }
 
-    return () => ctx.revert();
+    let ctx = initGSAP();
+
+    function onResize() {
+      if (ctx) ctx.revert();
+      ctx = initGSAP();
+    }
+
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      if (ctx) ctx.revert();
+    };
   }, []);
 
   return (
     <section
       id="talleres"
       ref={sectionRef}
-      className="relative overflow-hidden bg-gradient-to-b from-white via-berry-light/20 to-coral-light/30"
+      className="relative overflow-x-hidden bg-gradient-to-b from-white via-berry-light/20 to-coral-light/30"
     >
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-[15%] top-[10%] h-24 w-24 animate-float rounded-full bg-candy-pink/15 blur-xl" />
@@ -110,7 +127,7 @@ export function Workshops() {
 
         <div
           ref={trackRef}
-          className="flex gap-6 px-4 sm:px-8 lg:px-16 pb-8"
+          className="flex flex-col sm:flex-row gap-4 sm:gap-6 px-4 sm:px-8 lg:px-16 pb-8"
         >
           {workshopEvents.map((workshop, index) => {
             const level = levelConfig[workshop.level];
@@ -119,7 +136,7 @@ export function Workshops() {
             return (
               <div
                 key={workshop.id}
-                className="group relative min-w-[340px] flex-shrink-0 overflow-hidden rounded-3xl border border-white/10 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer md:min-w-[400px]"
+                className="group relative w-full sm:w-auto sm:min-w-[340px] sm:flex-shrink-0 overflow-hidden rounded-3xl border border-white/10 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl cursor-pointer md:min-w-[400px]"
                 onClick={() => setSelected(workshop)}
                 role="button"
                 tabIndex={0}
@@ -141,7 +158,7 @@ export function Workshops() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/10 transition-opacity duration-500 group-hover:from-black/90" />
 
                 {/* Content */}
-                <div className="relative flex h-[500px] flex-col justify-end p-6">
+                <div className="relative flex h-[360px] flex-col justify-end p-5 sm:h-[500px] sm:p-6">
                   {/* Level badge */}
                   <div className="absolute left-6 top-6">
                     <span
