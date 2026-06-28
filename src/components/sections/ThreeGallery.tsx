@@ -40,17 +40,33 @@ function createTextureForBand(bandIndex: number): Promise<BandResult> {
       img.crossOrigin = "anonymous";
       img.onload = () => {
         const ratio = img.naturalWidth / img.naturalHeight;
-        let w = Math.round(IMAGE_HEIGHT * ratio);
-        let h = IMAGE_HEIGHT;
-        if (w > MAX_IMAGE_WIDTH) {
-          w = MAX_IMAGE_WIDTH;
-          h = Math.round(w / ratio);
+        let w: number, h: number;
+        if (ratio >= 1) {
+          h = IMAGE_HEIGHT;
+          w = Math.round(h * ratio);
+          if (w > MAX_IMAGE_WIDTH) { w = MAX_IMAGE_WIDTH; h = Math.round(w / ratio); }
+        } else {
+          w = Math.round(BAND_HEIGHT * ratio);
+          h = BAND_HEIGHT;
+          if (w < 80) { w = 80; h = Math.round(w / ratio); }
         }
         imgData.push({ img, width: w, height: h });
         loaded++;
         if (loaded === images.length) drawBand();
       };
       img.onerror = () => {
+        // Fallback: colored placeholder
+        const c = document.createElement("canvas");
+        c.width = 120; c.height = 180;
+        const cx = c.getContext("2d")!;
+        cx.fillStyle = `hsl(${(bandIndex * 45) % 360}, 60%, 70%)`;
+        cx.fillRect(0, 0, 120, 180);
+        cx.fillStyle = "#fff";
+        cx.font = "bold 14px sans-serif";
+        cx.textAlign = "center";
+        cx.fillText("buggy", 60, 85);
+        cx.fillText("ruggy", 60, 105);
+        imgData.push({ img: c as unknown as HTMLImageElement, width: 120, height: 180 });
         loaded++;
         if (loaded === images.length) drawBand();
       };
@@ -74,24 +90,50 @@ function createTextureForBand(bandIndex: number): Promise<BandResult> {
         for (const d of imgData) {
           const cy = (BAND_HEIGHT - d.height) / 2;
           ctx.save();
-          // Shadow
-          ctx.shadowColor = "rgba(0,0,0,0.35)";
-          ctx.shadowBlur = SHADOW_OFFSET * 2;
-          ctx.shadowOffsetX = SHADOW_OFFSET * 0.5;
-          ctx.shadowOffsetY = SHADOW_OFFSET;
-          // Rounded rect clip path
+          // Manual rounded rect path (broad browser support)
+          const r = IMAGE_RADIUS;
+          const rx = x, ry = cy, rw = d.width, rh = d.height;
           ctx.beginPath();
-          ctx.roundRect(x, cy, d.width, d.height, IMAGE_RADIUS);
+          ctx.moveTo(rx + r, ry);
+          ctx.lineTo(rx + rw - r, ry);
+          ctx.quadraticCurveTo(rx + rw, ry, rx + rw, ry + r);
+          ctx.lineTo(rx + rw, ry + rh - r);
+          ctx.quadraticCurveTo(rx + rw, ry + rh, rx + rw - r, ry + rh);
+          ctx.lineTo(rx + r, ry + rh);
+          ctx.quadraticCurveTo(rx, ry + rh, rx, ry + rh - r);
+          ctx.lineTo(rx, ry + r);
+          ctx.quadraticCurveTo(rx, ry, rx + r, ry);
+          ctx.closePath();
+          // Shadow behind image
+          ctx.shadowColor = "rgba(0,0,0,0.45)";
+          ctx.shadowBlur = 10;
+          ctx.shadowOffsetX = 3;
+          ctx.shadowOffsetY = 5;
+          ctx.fillStyle = "rgba(0,0,0,0.3)";
+          ctx.fill();
+          // Clip and draw image
           ctx.clip();
-          // Draw image
-          ctx.globalAlpha = 0.95;
+          ctx.shadowColor = "transparent";
+          ctx.shadowBlur = 0;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 0;
+          ctx.globalAlpha = 1;
           ctx.drawImage(d.img, x, cy, d.width, d.height);
           ctx.restore();
-          // Draw subtle border
-          ctx.strokeStyle = "rgba(255,255,255,0.15)";
-          ctx.lineWidth = 1;
+          // Subtle white border
+          ctx.strokeStyle = "rgba(255,255,255,0.12)";
+          ctx.lineWidth = 1.5;
           ctx.beginPath();
-          ctx.roundRect(x, cy, d.width, d.height, IMAGE_RADIUS);
+          ctx.moveTo(rx + r, ry);
+          ctx.lineTo(rx + rw - r, ry);
+          ctx.quadraticCurveTo(rx + rw, ry, rx + rw, ry + r);
+          ctx.lineTo(rx + rw, ry + rh - r);
+          ctx.quadraticCurveTo(rx + rw, ry + rh, rx + rw - r, ry + rh);
+          ctx.lineTo(rx + r, ry + rh);
+          ctx.quadraticCurveTo(rx, ry + rh, rx, ry + rh - r);
+          ctx.lineTo(rx, ry + r);
+          ctx.quadraticCurveTo(rx, ry, rx + r, ry);
+          ctx.closePath();
           ctx.stroke();
           x += d.width + IMAGE_GAP;
         }
