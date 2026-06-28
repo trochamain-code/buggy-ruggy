@@ -3,9 +3,11 @@ import * as THREE from "three";
 import { galleryImages } from "@/lib/data";
 
 const IMAGE_HEIGHT = 180;
-const IMAGE_GAP = 28;
+const IMAGE_GAP = 48;
 const MAX_IMAGE_WIDTH = 500;
 const BAND_HEIGHT = 220;
+const IMAGE_RADIUS = 14;
+const SHADOW_OFFSET = 4;
 
 const BANDS = 8;
 const IMAGES_PER_BAND = [11, 12, 11, 12, 12, 11, 12, 12]; // ~93 images across 8 bands
@@ -71,8 +73,26 @@ function createTextureForBand(bandIndex: number): Promise<BandResult> {
       for (let c = 0; c < CLONE_COUNT; c++) {
         for (const d of imgData) {
           const cy = (BAND_HEIGHT - d.height) / 2;
-          ctx.globalAlpha = 0.92;
+          ctx.save();
+          // Shadow
+          ctx.shadowColor = "rgba(0,0,0,0.35)";
+          ctx.shadowBlur = SHADOW_OFFSET * 2;
+          ctx.shadowOffsetX = SHADOW_OFFSET * 0.5;
+          ctx.shadowOffsetY = SHADOW_OFFSET;
+          // Rounded rect clip path
+          ctx.beginPath();
+          ctx.roundRect(x, cy, d.width, d.height, IMAGE_RADIUS);
+          ctx.clip();
+          // Draw image
+          ctx.globalAlpha = 0.95;
           ctx.drawImage(d.img, x, cy, d.width, d.height);
+          ctx.restore();
+          // Draw subtle border
+          ctx.strokeStyle = "rgba(255,255,255,0.15)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.roundRect(x, cy, d.width, d.height, IMAGE_RADIUS);
+          ctx.stroke();
           x += d.width + IMAGE_GAP;
         }
       }
@@ -359,7 +379,7 @@ export function ThreeGallery() {
     <section
       id="galeria"
       ref={containerRef}
-      className="relative h-svh w-full overflow-hidden bg-[#0a1a2a]"
+      className="relative h-[200svh] w-full overflow-hidden bg-[#0a1a2a]"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-[#0a1a2a] to-transparent h-20" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-[#0a1a2a] to-transparent h-20" />
