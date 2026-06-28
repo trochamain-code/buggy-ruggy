@@ -181,14 +181,14 @@ interface BandConfig {
 }
 
 const bandConfigs: BandConfig[] = [
-  { offsetY: -195, speed: 0.8, rotation: 0.12, curveAmount: 30 },
-  { offsetY: -135, speed: 1.1, rotation: -0.08, curveAmount: 35 },
-  { offsetY: -75, speed: 1.4, rotation: 0.1, curveAmount: 28 },
-  { offsetY: -15, speed: 0.6, rotation: -0.06, curveAmount: 32 },
-  { offsetY: 45, speed: 0.9, rotation: 0.07, curveAmount: 30 },
-  { offsetY: 105, speed: 1.2, rotation: -0.1, curveAmount: 34 },
-  { offsetY: 165, speed: 0.7, rotation: 0.09, curveAmount: 28 },
-  { offsetY: 225, speed: 1.5, rotation: -0.07, curveAmount: 36 },
+  { offsetY: -800, speed: 0.8, rotation: 0.12, curveAmount: 30 },
+  { offsetY: -570, speed: 1.1, rotation: -0.08, curveAmount: 35 },
+  { offsetY: -340, speed: 1.4, rotation: 0.1, curveAmount: 28 },
+  { offsetY: -110, speed: 0.6, rotation: -0.06, curveAmount: 32 },
+  { offsetY: 120, speed: 0.9, rotation: 0.07, curveAmount: 30 },
+  { offsetY: 350, speed: 1.2, rotation: -0.1, curveAmount: 34 },
+  { offsetY: 580, speed: 0.7, rotation: 0.09, curveAmount: 28 },
+  { offsetY: 810, speed: 1.5, rotation: -0.07, curveAmount: 36 },
 ];
 
 export function ThreeGallery() {
