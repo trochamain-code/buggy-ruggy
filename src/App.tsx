@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
-import { Gallery } from "@/components/sections/Gallery";
+import { AnimatedGallery } from "@/components/sections/AnimatedGallery";
 import { CustomDesign } from "@/components/sections/CustomDesign";
 import { Workshops } from "@/components/sections/Workshops";
 import { Contact } from "@/components/sections/Contact";
@@ -17,7 +17,7 @@ function App() {
       <Navbar />
       <main>
         <Hero />
-        <Gallery />
+        <AnimatedGallery />
         <CustomDesign />
         <Workshops />
         <Contact />

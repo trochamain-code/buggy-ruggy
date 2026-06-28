@@ -45,6 +45,8 @@ const cardColors = [
   "border-ocean bg-ocean-light/30",
   "border-sun bg-sun-light/30",
   "border-lime bg-lime-light/30",
+  "border-grape bg-grape-light/30",
+  "border-coral bg-coral-light/30",
 ];
 
 export function Workshops() {
@@ -93,7 +95,7 @@ export function Workshops() {
           </p>
         </motion.div>
 
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {workshopEvents.map((workshop, index) => {
             const level = levelConfig[workshop.level];
             const spotsLeft = workshop.capacity - workshop.enrolled;
