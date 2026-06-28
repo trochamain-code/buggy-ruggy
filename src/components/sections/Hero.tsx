@@ -18,6 +18,11 @@ export function Hero() {
   const [typed, setTyped] = useState("");
   const [showCursor, setShowCursor] = useState(true);
 
+  const slogans = ["PISA SOBRE TUS SUEÑOS", "COLOR QUE SE TOCA", "LANA CON ACTITUD"];
+  const [sloganIndex, setSloganIndex] = useState(0);
+  const [sloganTyped, setSloganTyped] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
   useEffect(() => {
     let i = 0;
     setTyped("");
@@ -31,6 +36,37 @@ export function Hero() {
     }, 80);
     return () => clearInterval(timer);
   }, []);
+
+  // Cycling slogans: type → wait 3s → delete → next
+  useEffect(() => {
+    const slogan = slogans[sloganIndex]!;
+    let i = deleting ? slogan.length : 0;
+
+    const tick = () => {
+      if (!deleting) {
+        if (i < slogan.length) {
+          setSloganTyped(slogan.slice(0, i + 1));
+          i++;
+        } else {
+          // Done typing, wait 3s then start deleting
+          setTimeout(() => setDeleting(true), 2500);
+        }
+      } else {
+        if (i > 0) {
+          setSloganTyped(slogan.slice(0, i - 1));
+          i--;
+        } else {
+          // Done deleting, go to next slogan
+          setDeleting(false);
+          setSloganIndex((prev) => (prev + 1) % slogans.length);
+        }
+      }
+    };
+
+    const speed = deleting ? 40 : 60;
+    const timer = setInterval(tick, speed);
+    return () => clearInterval(timer);
+  }, [sloganIndex, deleting, slogans]);
 
   useEffect(() => {
     const blink = setInterval(() => setShowCursor((p) => !p), 530);
@@ -186,6 +222,17 @@ export function Hero() {
             <span className="text-coral">atrevidas</span> y{" "}
             <span className="text-grape">divertidas</span>. ¡Y te enseñamos a
             hacer la tuya en nuestros talleres!
+          </motion.p>
+
+          {/* Cycling slogans */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+            className="mt-4 font-street text-2xl uppercase tracking-[0.15em] text-ocean sm:text-3xl"
+          >
+            {sloganTyped}
+            <span className={`${showCursor ? "opacity-100" : "opacity-0"} transition-opacity`}>|</span>
           </motion.p>
 
           {/* CTAs */}
