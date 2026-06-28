@@ -187,12 +187,9 @@ export function CustomDesign() {
               <Palette size={16} /> Diseño a Medida
             </span>
             <SplitText className="mt-6 text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl">
-              Tu alfombra,{" "}
-              <span className="bg-gradient-to-r from-candy-pink via-berry to-grape bg-clip-text text-transparent">
-                tu personalidad
-              </span>
+              Tu alfombra, tu personalidad
             </SplitText>
-            <p className="mt-4 text-lg font-semibold leading-relaxed black">
+            <p className="mt-4 text-lg font-semibold leading-relaxed text-neutral-500">
               Aburrirse está prohibido. Diseñamos alfombras que{" "}
               <span className="text-coral">gritan color</span> y cuentan{" "}
               <span className="text-ocean">tu historia</span>.
