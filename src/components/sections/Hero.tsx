@@ -13,19 +13,23 @@ export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const underlineRef = useRef<SVGSVGElement>(null);
 
-  const fullText = "EL HILO SE VUELVE ARTE";
+  const typeText = "EL HILO SE";
+  const revealText = "VUELVE ARTE";
   const [typed, setTyped] = useState("");
   const [showCursor, setShowCursor] = useState(true);
+  const [showReveal, setShowReveal] = useState(false);
 
   useEffect(() => {
     let i = 0;
     setTyped("");
+    setShowReveal(false);
     const timer = setInterval(() => {
-      if (i < fullText.length) {
-        setTyped(fullText.slice(0, i + 1));
+      if (i < typeText.length) {
+        setTyped(typeText.slice(0, i + 1));
         i++;
       } else {
         clearInterval(timer);
+        setTimeout(() => setShowReveal(true), 200);
       }
     }, 80);
     return () => clearInterval(timer);
@@ -127,11 +131,19 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
             className="font-climate max-w-5xl text-balance text-5xl leading-[1.05] tracking-tight text-neutral-900 sm:text-6xl md:text-7xl lg:text-8xl"
           >
-            EL HILO SE 
+            <span>
+              {typed}
+              <span className={`${showCursor ? "opacity-100" : "opacity-0"} transition-opacity`}>|</span>
+            </span>
             <br />
-            <span className="relative inline-block">
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: showReveal ? 1 : 0 }}
+              transition={{ duration: 0.6 }}
+              className="relative inline-block"
+            >
               <span className="relative z-10 bg-gradient-to-r from-candy-pink via-coral to-sun bg-clip-text text-transparent">
-                VUELVE ARTE
+                {revealText}
               </span>
               {/* Tufted underline — gradient bar frayed into fuzzy yarn pile.
                   Its weave unravels with scroll (GSAP, see underlineRef). */}
@@ -159,7 +171,7 @@ export function Hero() {
                   filter="url(#tuft-bar)"
                 />
               </svg>
-            </span>
+            </motion.span>
           </motion.h1>
 
           {/* Subtitle */}
@@ -175,17 +187,6 @@ export function Hero() {
             <span className="text-coral">atrevidas</span> y{" "}
             <span className="text-grape">divertidas</span>. ¡Y te enseñamos a
             hacer la tuya en nuestros talleres!
-          </motion.p>
-
-          {/* Typing effect */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="mt-3 font-street text-3xl uppercase tracking-[0.2em] text-candy-pink sm:text-4xl"
-          >
-            {typed}
-            <span className={`${showCursor ? "opacity-100" : "opacity-0"} transition-opacity`}>|</span>
           </motion.p>
 
           {/* CTAs */}
