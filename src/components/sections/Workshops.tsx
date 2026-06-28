@@ -1,7 +1,7 @@
 import { useState, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Calendar, Clock, Users, ChevronRight, Paintbrush, Star } from "lucide-react";
+import { Calendar, Clock, Users, ChevronRight, Star } from "lucide-react";
 import { SplitText } from "@/components/ui/SplitText";
 import {
   Dialog,

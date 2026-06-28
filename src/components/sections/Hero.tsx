@@ -3,7 +3,6 @@ import { motion } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, Sparkles, Play, ChevronDown } from "lucide-react";
-import { BuggyRuggyLogo } from "@/components/ui/BuggyRuggyLogo";
 import { ScrambleText } from "@/components/ui/ScrambleText";
 import { YarnParticles } from "@/components/ui/YarnParticles";
 
