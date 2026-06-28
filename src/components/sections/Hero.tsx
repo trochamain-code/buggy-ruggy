@@ -56,12 +56,12 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-screen items-center overflow-hidden bg-white"
+      className="relative flex min-h-screen items-center bg-white/0"
     >
-      {/* Looping tufting-machine background video (white studio, grey shadow) */}
+      {/* Looping tufting-machine background video — fixed full-viewport */}
       <video
         ref={videoRef}
-        className="absolute inset-0 h-full w-full object-cover"
+        className="fixed inset-0 z-0 h-screen w-screen object-cover"
         autoPlay
         muted
         loop
@@ -84,7 +84,7 @@ export function Hero() {
 
       <div
         ref={contentRef}
-        className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-28 pt-24 sm:px-6 lg:px-8"
+        className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-16 pt-24 sm:px-6 lg:px-8"
       >
         <div className="flex flex-col items-center text-center">
           {/* Street kicker */}

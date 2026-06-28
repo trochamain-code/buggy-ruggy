@@ -37,23 +37,23 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-neutral-950 text-neutral-300">
+    <footer className="relative flex min-h-screen flex-col overflow-hidden bg-neutral-950 text-neutral-300">
       <div className="h-1.5 w-full bg-gradient-to-r from-candy-pink via-coral via-sun via-lime via-ocean to-grape" />
 
       <span className="bg-grain pointer-events-none absolute inset-0 opacity-[0.1] mix-blend-overlay" />
       <span className="pointer-events-none absolute -left-20 top-10 h-56 w-56 rounded-full bg-candy-pink/20 blur-3xl" />
       <span className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-ocean/20 blur-3xl" />
 
-      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         {/* CTA section */}
-        <div className="mb-16 text-center">
+        <div className="mb-10 text-center">
           <SplitText
             as="h2"
             type="words"
             stagger={0.06}
             duration={0.6}
             from={{ opacity: 0, y: 40, rotateX: 0 }}
-            className="font-climate text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl"
+            className="font-climate mt-8 text-2xl font-extrabold tracking-tight text-white sm:text-3xl lg:text-4xl"
           >
             ¿List@ para tejer la tuya?
           </SplitText>
@@ -92,12 +92,12 @@ export function Footer() {
         </div>
 
         {/* Wordmark — DrawSVG on scroll */}
-        <div className="mb-12">
+        <div className="mb-8">
           <Wordmark />
         </div>
 
         {/* Grid */}
-        <div className="grid gap-12 border-t border-white/10 pt-12 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 border-t border-white/10 pt-8 md:grid-cols-2 lg:grid-cols-3">
           <div>
             <h4 className="font-street mb-4 text-xl uppercase tracking-[0.15em] text-coral">
               Servicios
@@ -161,7 +161,7 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 sm:flex-row">
+        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row">
           <p className="text-xs font-semibold text-neutral-500">
             &copy; {new Date().getFullYear()} buggy ruggy. Hecho con{" "}
             <Heart size={12} className="inline fill-candy-pink text-candy-pink" />{" "}

@@ -54,7 +54,7 @@ export function Wordmark({ className }: WordmarkProps) {
         viewBox="0 0 800 180"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full"
+        className="h-40 w-full sm:h-48"
       >
         <defs>
           <linearGradient id="wm-grad" x1="0%" y1="0%" x2="100%" y2="0%">
