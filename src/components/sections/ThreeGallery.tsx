@@ -2,10 +2,10 @@ import { useRef, useEffect } from "react";
 import * as THREE from "three";
 import { galleryImages } from "@/lib/data";
 
-const IMAGE_HEIGHT = 90;
-const IMAGE_GAP = 16;
-const MAX_IMAGE_WIDTH = 280;
-const BAND_HEIGHT = 110;
+const IMAGE_HEIGHT = 180;
+const IMAGE_GAP = 28;
+const MAX_IMAGE_WIDTH = 500;
+const BAND_HEIGHT = 220;
 
 const BANDS = 8;
 const IMAGES_PER_BAND = [11, 12, 11, 12, 12, 11, 12, 12]; // ~93 images across 8 bands
@@ -116,9 +116,9 @@ void main() {
   float curve = 4.0 * (nx - 0.5) * (nx - 0.5);
   float curveOffset = (0.5 - curve) * uCurveAmount;
 
-  float bandTop = (uResolution.y - 110.0) * 0.5 + uOffsetY + curveOffset;
-  float bandBottom = bandTop + 110.0;
-  float bandCenterY = bandTop + 55.0;
+  float bandTop = (uResolution.y - 220.0) * 0.5 + uOffsetY + curveOffset;
+  float bandBottom = bandTop + 220.0;
+  float bandCenterY = bandTop + 110.0;
 
   // Rotation
   vec2 rc = vec2(uResolution.x * 0.5, bandCenterY);
