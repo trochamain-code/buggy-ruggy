@@ -13,67 +13,81 @@ export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const underlineRef = useRef<SVGSVGElement>(null);
 
-  const typeText = "EL HILO SE";
-  const fullTyped = "EL HILO SE VUELVE ARTE";
-  const [typed, setTyped] = useState("");
+  const sloganPairs = [
+    { first: "EL HILO SE", second: "VUELVE ARTE" },
+    { first: "PISA SOBRE", second: "TUS SUEÑOS" },
+    { first: "COLOR QUE", second: "SE TOCA" },
+    { first: "LANA CON", second: "ACTITUD" },
+  ];
+
+  const [pairIndex, setPairIndex] = useState(0);
+  const [firstTyped, setFirstTyped] = useState("");
+  const [secondTyped, setSecondTyped] = useState("");
+  const [phase, setPhase] = useState<"type1" | "type2" | "wait" | "del2" | "del1">("type1");
   const [showCursor, setShowCursor] = useState(true);
 
-  const slogans = ["PISA SOBRE TUS SUEÑOS", "COLOR QUE SE TOCA", "LANA CON ACTITUD"];
-  const [sloganIndex, setSloganIndex] = useState(0);
-  const [sloganTyped, setSloganTyped] = useState("");
-  const [deleting, setDeleting] = useState(false);
+  const currentPair = sloganPairs[pairIndex]!;
 
   useEffect(() => {
     let i = 0;
-    setTyped("");
-    const timer = setInterval(() => {
-      if (i < fullTyped.length) {
-        setTyped(fullTyped.slice(0, i + 1));
-        i++;
-      } else {
-        clearInterval(timer);
-      }
-    }, 80);
-    return () => clearInterval(timer);
-  }, []);
-
-  // Cycling slogans: type → wait 3s → delete → next
-  useEffect(() => {
-    const slogan = slogans[sloganIndex]!;
-    let i = deleting ? slogan.length : 0;
-
     const tick = () => {
-      if (!deleting) {
-        if (i < slogan.length) {
-          setSloganTyped(slogan.slice(0, i + 1));
-          i++;
-        } else {
-          // Done typing, wait 3s then start deleting
-          setTimeout(() => setDeleting(true), 2500);
+      switch (phase) {
+        case "type1": {
+          if (i <= currentPair.first.length) {
+            setFirstTyped(currentPair.first.slice(0, i));
+            i++;
+          } else {
+            i = 0;
+            setPhase("type2");
+          }
+          break;
         }
-      } else {
-        if (i > 0) {
-          setSloganTyped(slogan.slice(0, i - 1));
-          i--;
-        } else {
-          // Done deleting, go to next slogan
-          setDeleting(false);
-          setSloganIndex((prev) => (prev + 1) % slogans.length);
+        case "type2": {
+          if (i <= currentPair.second.length) {
+            setSecondTyped(currentPair.second.slice(0, i));
+            i++;
+          } else {
+            setTimeout(() => setPhase("wait"), 3000);
+          }
+          break;
+        }
+        case "wait":
+          break;
+        case "del2": {
+          if (i < currentPair.second.length) {
+            setSecondTyped(currentPair.second.slice(0, currentPair.second.length - i - 1));
+            i++;
+          } else {
+            i = 0;
+            setPhase("del1");
+          }
+          break;
+        }
+        case "del1": {
+          if (i < currentPair.first.length) {
+            setFirstTyped(currentPair.first.slice(0, currentPair.first.length - i - 1));
+            i++;
+          } else {
+            i = 0;
+            setPairIndex((prev) => (prev + 1) % sloganPairs.length);
+            setPhase("type1");
+          }
+          break;
         }
       }
     };
 
-    const speed = deleting ? 40 : 60;
-    const timer = setInterval(tick, speed);
+    const speeds: Record<typeof phase, number> = {
+      type1: 70, type2: 70, wait: 99999, del2: 35, del1: 35,
+    };
+    const timer = setInterval(tick, speeds[phase]);
     return () => clearInterval(timer);
-  }, [sloganIndex, deleting, slogans]);
+  }, [phase, pairIndex, currentPair, sloganPairs.length]);
 
   useEffect(() => {
     const blink = setInterval(() => setShowCursor((p) => !p), 530);
     return () => clearInterval(blink);
   }, []);
-
-  const firstLineDone = typed.length >= typeText.length;
 
   // Scroll-linked animation driven by GSAP ScrollTrigger:
   //  · the content drifts up and fades as you scroll past the hero
@@ -167,16 +181,16 @@ export function Hero() {
             className="font-climate max-w-5xl text-balance text-5xl leading-[1.05] tracking-tight text-neutral-900 sm:text-6xl md:text-7xl lg:text-8xl"
           >
             <span>
-              {typed.length <= typeText.length ? typed : typeText}
-              {!firstLineDone && (
+              {firstTyped}
+              {(phase === "type1" || (phase === "type2" && secondTyped === "")) && (
                 <span className={`${showCursor ? "opacity-100" : "opacity-0"} transition-opacity`}>|</span>
               )}
             </span>
             <br />
             <motion.span className="relative inline-block">
               <span className="relative z-10 bg-gradient-to-r from-candy-pink via-coral to-sun bg-clip-text text-transparent">
-                {typed.length > typeText.length ? typed.slice(typeText.length + 1) : ""}
-                {typed.length > typeText.length && (
+                {secondTyped}
+                {phase === "type2" && secondTyped !== "" && (
                   <span className={`${showCursor ? "opacity-100" : "opacity-0"} transition-opacity`}>|</span>
                 )}
               </span>
@@ -222,17 +236,6 @@ export function Hero() {
             <span className="text-coral">atrevidas</span> y{" "}
             <span className="text-grape">divertidas</span>. ¡Y te enseñamos a
             hacer la tuya en nuestros talleres!
-          </motion.p>
-
-          {/* Cycling slogans */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-            className="mt-4 font-street text-2xl uppercase tracking-[0.15em] text-ocean sm:text-3xl"
-          >
-            {sloganTyped}
-            <span className={`${showCursor ? "opacity-100" : "opacity-0"} transition-opacity`}>|</span>
           </motion.p>
 
           {/* CTAs */}
