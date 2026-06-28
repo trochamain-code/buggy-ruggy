@@ -121,6 +121,7 @@ uniform float uOffsetY;
 uniform float uRotation;
 uniform float uBandIndex;
 uniform float uCurveAmount;
+uniform float uScale;
 
 varying vec2 vUv;
 
@@ -136,9 +137,10 @@ void main() {
   float curve = 4.0 * (nx - 0.5) * (nx - 0.5);
   float curveOffset = (0.5 - curve) * uCurveAmount;
 
-  float bandTop = (uResolution.y - 220.0) * 0.5 + uOffsetY + curveOffset;
-  float bandBottom = bandTop + 220.0;
-  float bandCenterY = bandTop + 110.0;
+  float bandH = 220.0 * uScale;
+  float bandTop = (uResolution.y - bandH) * 0.5 + uOffsetY + curveOffset;
+  float bandBottom = bandTop + bandH;
+  float bandCenterY = bandTop + bandH * 0.5;
 
   // Rotation
   vec2 rc = vec2(uResolution.x * 0.5, bandCenterY);
@@ -178,17 +180,18 @@ interface BandConfig {
   speed: number;
   rotation: number;
   curveAmount: number;
+  scale: number;
 }
 
 const bandConfigs: BandConfig[] = [
-  { offsetY: -330, speed: 0.8, rotation: 0.12, curveAmount: 30 },
-  { offsetY: -210, speed: 1.1, rotation: -0.08, curveAmount: 35 },
-  { offsetY: -90, speed: 1.4, rotation: 0.1, curveAmount: 28 },
-  { offsetY: 30, speed: 0.6, rotation: -0.06, curveAmount: 32 },
-  { offsetY: 150, speed: 0.9, rotation: 0.07, curveAmount: 30 },
-  { offsetY: 270, speed: 1.2, rotation: -0.1, curveAmount: 34 },
-  { offsetY: 390, speed: 0.7, rotation: 0.09, curveAmount: 28 },
-  { offsetY: 510, speed: 1.5, rotation: -0.07, curveAmount: 36 },
+  { offsetY: -450, speed: 0.8, rotation: 0.12, curveAmount: 30, scale: 1.28 },
+  { offsetY: -300, speed: 1.1, rotation: -0.08, curveAmount: 35, scale: 1.20 },
+  { offsetY: -160, speed: 1.4, rotation: 0.1, curveAmount: 28, scale: 1.12 },
+  { offsetY: -30, speed: 0.6, rotation: -0.06, curveAmount: 32, scale: 1.05 },
+  { offsetY: 100, speed: 0.9, rotation: 0.07, curveAmount: 30, scale: 0.98 },
+  { offsetY: 240, speed: 1.2, rotation: -0.1, curveAmount: 34, scale: 0.90 },
+  { offsetY: 390, speed: 0.7, rotation: 0.09, curveAmount: 28, scale: 0.82 },
+  { offsetY: 550, speed: 1.5, rotation: -0.07, curveAmount: 36, scale: 0.74 },
 ];
 
 export function ThreeGallery() {
@@ -244,6 +247,7 @@ export function ThreeGallery() {
             uRotation: { value: config.rotation },
             uBandIndex: { value: i },
             uCurveAmount: { value: config.curveAmount },
+            uScale: { value: config.scale },
           },
           vertexShader: vertShader,
           fragmentShader: fragShader,
