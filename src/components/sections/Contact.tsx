@@ -95,7 +95,7 @@ export function Contact() {
               </span>
               ?
             </SplitText>
-            <p className="mt-4 text-lg font-semibold leading-relaxed text-neutral-500">
+            <p className="mt-4 text-lg font-semibold leading-relaxed black">
               Sin compromiso, solo{' '}
               <span className="text-candy-pink">ideas chulas</span>. Cuéntanos
               qué tienes en mente y le damos forma juntos.
@@ -170,7 +170,7 @@ export function Contact() {
                     className={`cursor-pointer rounded-full px-4 py-2.5 text-sm font-extrabold transition-all duration-200 ${
                       interest === option.value
                         ? "bg-candy-pink text-white shadow-candy scale-105"
-                        : "bg-neutral-100 text-neutral-500 hover:bg-neutral-200 hover:scale-105"
+                        : "bg-neutral-100 black hover:bg-neutral-200 hover:scale-105"
                     }`}
                   >
                     <input

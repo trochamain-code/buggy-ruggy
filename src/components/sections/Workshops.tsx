@@ -111,7 +111,7 @@ export function Workshops() {
             <SplitText className="mt-6 text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl">
               Aprende, imagína, crea
             </SplitText>
-            <p className="mt-4 text-lg font-semibold leading-relaxed text-neutral-500">
+            <p className="mt-4 text-lg font-semibold leading-relaxed black">
               Talleres presenciales donde{" "}
               <span className="text-coral">te diviertes</span> y te llevas tu
               propia alfombra a casa. ¡No necesitas experiencia!

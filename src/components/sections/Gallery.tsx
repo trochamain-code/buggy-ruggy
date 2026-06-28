@@ -67,7 +67,7 @@ export function Gallery() {
               </span>
             </span>
           </h2>
-          <p className="mt-4 text-lg font-semibold leading-relaxed text-neutral-500">
+          <p className="mt-4 text-lg font-semibold leading-relaxed black">
             Cada alfombra es un{' '}
             <span className="text-candy-pink">universo de color</span>. Mira,
             toca, enamórate.
@@ -91,7 +91,7 @@ export function Gallery() {
                 className={`group inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-extrabold transition-all duration-300 ${
                   active
                     ? cat.color
-                    : "bg-neutral-100 text-neutral-500 hover:bg-neutral-200 hover:text-neutral-700"
+                    : "bg-neutral-100 black hover:bg-neutral-200 hover:text-neutral-700"
                 } ${active ? "scale-105" : "hover:scale-105"}`}
               >
                 <cat.icon size={16} />

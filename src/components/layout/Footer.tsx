@@ -175,12 +175,12 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row">
-          <p className="text-xs font-semibold text-neutral-500">
+          <p className="text-xs font-semibold black">
             &copy; {new Date().getFullYear()} buggy ruggy. Hecho con{" "}
             <Heart size={12} className="inline fill-candy-pink text-candy-pink" />{" "}
             en Sevilla.
           </p>
-          <p className="font-street text-sm uppercase tracking-[0.15em] text-neutral-500">
+          <p className="font-street text-sm uppercase tracking-[0.15em] black">
             Cada alfombra cuenta una historia
           </p>
         </div>

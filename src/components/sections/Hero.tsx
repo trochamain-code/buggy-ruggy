@@ -91,7 +91,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="font-street mb-5 flex items-center gap-3 text-base uppercase tracking-[0.4em] text-neutral-500"
+            className="font-street mb-5 flex items-center gap-3 text-base uppercase tracking-[0.4em] black"
           >
             <span className="h-px w-8 bg-gradient-to-r from-transparent to-candy-pink" />
             Studio de Tufting · Sevilla
@@ -215,7 +215,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.6 }}
-        className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-neutral-500"
+        className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 black"
         aria-label="Desplázate hacia abajo"
       >
         <span className="text-xs font-bold uppercase tracking-widest">Scroll</span>

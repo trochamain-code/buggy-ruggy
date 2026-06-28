@@ -38,7 +38,7 @@ export function AnimatedGallery() {
           </SplitText>
         </ContainerAnimated>
         <ContainerAnimated>
-          <p className="mt-4 text-lg font-semibold leading-relaxed text-neutral-500">
+          <p className="mt-4 text-lg font-semibold leading-relaxed black">
             Cada alfombra es un <span className="text-candy-pink">universo de color</span>. 
             Hechas a mano, con materiales premium y mucha actitud.
           </p>

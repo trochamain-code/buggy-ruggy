@@ -105,7 +105,7 @@ function DialogDescription({
 }: HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
-      className={cn("text-sm font-semibold leading-relaxed text-neutral-500", className)}
+      className={cn("text-sm font-semibold leading-relaxed black", className)}
       {...props}
     />
   );

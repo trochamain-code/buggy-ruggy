@@ -192,7 +192,7 @@ export function CustomDesign() {
                 tu personalidad
               </span>
             </SplitText>
-            <p className="mt-4 text-lg font-semibold leading-relaxed text-neutral-500">
+            <p className="mt-4 text-lg font-semibold leading-relaxed black">
               Aburrirse está prohibido. Diseñamos alfombras que{" "}
               <span className="text-coral">gritan color</span> y cuentan{" "}
               <span className="text-ocean">tu historia</span>.
