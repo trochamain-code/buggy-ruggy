@@ -1,11 +1,8 @@
-import { useState, useRef, useCallback, useEffect, useLayoutEffect } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import gsap from "gsap";
-import { Flip } from "gsap/Flip";
 import { X } from "lucide-react";
 import { InfiniteSlider } from "@/components/ui/infinite-slider-horizontal";
 import { galleryImages } from "@/lib/data";
-
-gsap.registerPlugin(Flip);
 
 const ROWS = 6;
 const cols = galleryImages
@@ -21,99 +18,38 @@ export function InfiniteGallery() {
   const [lightbox, setLightbox] = useState<number | null>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
-  const thumbRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 
   const openLightbox = useCallback((imgIndex: number) => {
-    const thumb = thumbRefs.current.get(imgIndex);
-    if (!thumb) return;
     setLightbox(imgIndex);
   }, []);
 
-  useLayoutEffect(() => {
-    if (lightbox === null || !imgRef.current || !overlayRef.current) return;
-    const thumb = thumbRefs.current.get(lightbox);
-    if (!thumb) return;
-    const thumbImg = thumb.querySelector("img");
-    if (!thumbImg) return;
-
-    const thumbRect = thumbImg.getBoundingClientRect();
-    const overlayRect = overlayRef.current.getBoundingClientRect();
-
-    gsap.set(imgRef.current, {
-      position: "fixed",
-      left: thumbRect.left - overlayRect.left,
-      top: thumbRect.top - overlayRect.top,
-      width: thumbRect.width,
-      height: thumbRect.height,
-      margin: 0,
-      borderRadius: "16px",
-      objectFit: "cover",
-    });
-
-    gsap.fromTo(
-      overlayRef.current,
-      { opacity: 0 },
-      { opacity: 1, duration: 0.4, ease: "power2.out" },
+  useEffect(() => {
+    if (lightbox === null || !overlayRef.current || !imgRef.current) return;
+    const tl = gsap.timeline();
+    tl.fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.out" });
+    tl.fromTo(
+      imgRef.current,
+      { scale: 0.85, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.4)" },
+      "-=0.2",
     );
-
-    gsap.to(imgRef.current, {
-      left: "50%",
-      top: "50%",
-      xPercent: -50,
-      yPercent: -50,
-      width: "auto",
-      height: "auto",
-      maxWidth: "90vw",
-      maxHeight: "85vh",
-      objectFit: "contain",
-      borderRadius: "20px",
-      duration: 0.55,
-      ease: "power3.inOut",
-    });
-
-    return () => {
-      gsap.killTweensOf(imgRef.current);
-    };
   }, [lightbox]);
 
   const closeLightbox = useCallback(() => {
-    if (lightbox === null || !imgRef.current || !overlayRef.current) {
+    if (!overlayRef.current || !imgRef.current) {
       setLightbox(null);
       return;
     }
-    const thumb = thumbRefs.current.get(lightbox);
-    const thumbImg = thumb?.querySelector("img");
-
-    gsap.to(overlayRef.current, {
-      opacity: 0,
-      duration: 0.35,
-      ease: "power2.in",
+    const tl = gsap.timeline({
+      onComplete: () => setLightbox(null),
     });
-
-    if (thumbImg && imgRef.current) {
-      const thumbRect = thumbImg.getBoundingClientRect();
-      gsap.to(imgRef.current, {
-        left: thumbRect.left,
-        top: thumbRect.top,
-        xPercent: 0,
-        yPercent: 0,
-        width: thumbRect.width,
-        height: thumbRect.height,
-        borderRadius: "16px",
-        objectFit: "cover",
-        duration: 0.45,
-        ease: "power3.inOut",
-        onComplete: () => setLightbox(null),
-      });
-    } else {
-      gsap.to(imgRef.current, {
-        scale: 0.9,
-        opacity: 0,
-        duration: 0.3,
-        onComplete: () => setLightbox(null),
-      });
-    }
-  }, [lightbox]);
+    tl.to(imgRef.current, { scale: 0.9, opacity: 0, duration: 0.25, ease: "power2.in" });
+    tl.to(
+      overlayRef.current,
+      { opacity: 0, duration: 0.3, ease: "power2.in" },
+      "-=0.15",
+    );
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -161,9 +97,6 @@ export function InfiniteGallery() {
               return (
                 <div
                   key={img.src}
-                  ref={(el) => {
-                    if (el) thumbRefs.current.set(imgIndex, el);
-                  }}
                   onClick={() => openLightbox(imgIndex)}
                   className="group relative h-[200px] w-[200px] flex-shrink-0 cursor-pointer overflow-hidden rounded-2xl shadow-2xl sm:h-[260px] sm:w-[260px]"
                   role="button"
@@ -195,7 +128,7 @@ export function InfiniteGallery() {
       {lightbox !== null && lightboxSrc && (
         <div
           ref={overlayRef}
-          className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl bg-neutral-950/70"
+          className="fixed inset-0 z-50 backdrop-blur-xl bg-neutral-950/70 flex items-center justify-center"
           onClick={closeLightbox}
         >
           <button
@@ -212,7 +145,7 @@ export function InfiniteGallery() {
             ref={imgRef}
             src={lightboxSrc.src}
             alt={lightboxSrc.alt}
-            className="pointer-events-none"
+            className="max-h-[85vh] max-w-[90vw] rounded-2xl object-contain shadow-2xl"
             onClick={(e) => e.stopPropagation()}
             draggable={false}
           />
