@@ -55,7 +55,7 @@ export function Footer() {
             from={{ opacity: 0, y: 40, rotateX: 0 }}
             className="font-climate mt-8 text-2xl font-extrabold tracking-tight text-white sm:text-3xl lg:text-4xl"
           >
-            ¿List@ para tejer la tuya?
+            ¿List@ para BUGGYRUGGY la tuya?
           </SplitText>
 
           <motion.p
