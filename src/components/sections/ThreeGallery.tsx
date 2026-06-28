@@ -181,14 +181,14 @@ interface BandConfig {
 }
 
 const bandConfigs: BandConfig[] = [
-  { offsetY: -800, speed: 0.8, rotation: 0.12, curveAmount: 30 },
-  { offsetY: -570, speed: 1.1, rotation: -0.08, curveAmount: 35 },
-  { offsetY: -340, speed: 1.4, rotation: 0.1, curveAmount: 28 },
-  { offsetY: -110, speed: 0.6, rotation: -0.06, curveAmount: 32 },
-  { offsetY: 120, speed: 0.9, rotation: 0.07, curveAmount: 30 },
-  { offsetY: 350, speed: 1.2, rotation: -0.1, curveAmount: 34 },
-  { offsetY: 580, speed: 0.7, rotation: 0.09, curveAmount: 28 },
-  { offsetY: 810, speed: 1.5, rotation: -0.07, curveAmount: 36 },
+  { offsetY: -330, speed: 0.8, rotation: 0.12, curveAmount: 30 },
+  { offsetY: -210, speed: 1.1, rotation: -0.08, curveAmount: 35 },
+  { offsetY: -90, speed: 1.4, rotation: 0.1, curveAmount: 28 },
+  { offsetY: 30, speed: 0.6, rotation: -0.06, curveAmount: 32 },
+  { offsetY: 150, speed: 0.9, rotation: 0.07, curveAmount: 30 },
+  { offsetY: 270, speed: 1.2, rotation: -0.1, curveAmount: 34 },
+  { offsetY: 390, speed: 0.7, rotation: 0.09, curveAmount: 28 },
+  { offsetY: 510, speed: 1.5, rotation: -0.07, curveAmount: 36 },
 ];
 
 export function ThreeGallery() {
@@ -212,7 +212,7 @@ export function ThreeGallery() {
     camera.position.z = 1;
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
     renderer.domElement.style.position = "absolute";
     renderer.domElement.style.top = "0";
@@ -326,9 +326,10 @@ export function ThreeGallery() {
     window.addEventListener("keydown", onKeyDown);
 
     const resize = () => {
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      const h = container.clientHeight;
+      renderer.setSize(window.innerWidth, h);
       for (const mat of materialsRef.current) {
-        mat.uniforms.uResolution!.value.set(window.innerWidth, window.innerHeight);
+        mat.uniforms.uResolution!.value.set(window.innerWidth, h);
       }
     };
     window.addEventListener("resize", resize);
@@ -345,7 +346,7 @@ export function ThreeGallery() {
       scrollRef.current += (targetRef.current - scrollRef.current) * smoothing;
       for (const mat of materialsRef.current) {
         mat.uniforms.uScroll!.value = scrollRef.current;
-        mat.uniforms.uResolution!.value.set(window.innerWidth, window.innerHeight);
+        mat.uniforms.uResolution!.value.set(container.clientWidth, container.clientHeight);
       }
       renderer.render(scene, camera);
       rafRef.current = requestAnimationFrame(animate);
