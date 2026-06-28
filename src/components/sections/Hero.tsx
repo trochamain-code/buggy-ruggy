@@ -4,6 +4,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, Sparkles, Play, ChevronDown } from "lucide-react";
 import { BuggyRuggyLogo } from "@/components/ui/BuggyRuggyLogo";
+import { ScrambleText } from "@/components/ui/ScrambleText";
+import { YarnParticles } from "@/components/ui/YarnParticles";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -105,9 +107,15 @@ export function Hero() {
             className="flex items-center gap-2 rounded-full border border-candy-pink/40 bg-white/75 px-5 py-2 shadow-candy backdrop-blur-md"
           >
             <Sparkles size={16} className="text-candy-pink" />
-            <span className="text-sm font-bold text-candy-pink">
+            <ScrambleText
+              className="text-sm font-bold text-candy-pink"
+              scrollTrigger={false}
+              scrambleChars="!<>-_\\/[]{}—=+*^?#________"
+              revealDelay={0.6}
+              duration={0.8}
+            >
               ¡Taller creativo cada finde!
-            </span>
+            </ScrambleText>
             <Play size={14} className="text-coral" />
           </motion.div>
 
@@ -191,23 +199,29 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.6 }}
             className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
           >
-            <a
-              href="#galeria"
-              className="font-street group inline-flex -rotate-1 items-center gap-3 rounded-2xl bg-candy-pink px-8 py-3.5 text-2xl uppercase tracking-[0.08em] text-white shadow-[0_0_28px_rgba(255,46,122,0.6)] transition-all duration-300 hover:rotate-0 hover:-translate-y-1"
-            >
-              Ver Galería
-              <ArrowRight
-                size={22}
-                className="transition-transform duration-300 group-hover:translate-x-1"
-              />
-            </a>
-            <a
-              href="#talleres"
-              className="font-street group inline-flex rotate-1 items-center gap-2 rounded-2xl border-2 border-ocean bg-white/70 px-8 py-3.5 text-2xl uppercase tracking-[0.08em] text-ocean shadow-[0_0_24px_rgba(0,180,216,0.35)] backdrop-blur-sm transition-all duration-300 hover:rotate-0 hover:-translate-y-1 hover:bg-ocean hover:text-white"
-            >
-              <Sparkles size={20} />
-              Reservar Taller
-            </a>
+            <div className="relative">
+              <YarnParticles className="absolute inset-0 z-0 rounded-2xl" />
+              <a
+                href="#galeria"
+                className="font-street relative z-10 inline-flex -rotate-1 items-center gap-3 rounded-2xl bg-candy-pink px-8 py-3.5 text-2xl uppercase tracking-[0.08em] text-white shadow-[0_0_28px_rgba(255,46,122,0.6)] transition-all duration-300 hover:rotate-0 hover:-translate-y-1"
+              >
+                Ver Galería
+                <ArrowRight
+                  size={22}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </a>
+            </div>
+            <div className="relative">
+              <YarnParticles className="absolute inset-0 z-0 rounded-2xl" />
+              <a
+                href="#talleres"
+                className="font-street relative z-10 inline-flex rotate-1 items-center gap-2 rounded-2xl border-2 border-ocean bg-white/70 px-8 py-3.5 text-2xl uppercase tracking-[0.08em] text-ocean shadow-[0_0_24px_rgba(0,180,216,0.35)] backdrop-blur-sm transition-all duration-300 hover:rotate-0 hover:-translate-y-1 hover:bg-ocean hover:text-white"
+              >
+                <Sparkles size={20} />
+                Reservar Taller
+              </a>
+            </div>
           </motion.div>
         </div>
       </div>

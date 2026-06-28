@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { Wordmark } from "@/components/ui/Wordmark";
 import { SevillaClock } from "@/components/ui/SevillaClock";
 import { SplitText } from "@/components/ui/SplitText";
+import { MorphingYarn } from "@/components/ui/MorphingYarn";
 
 const footerLinks = {
   servicios: [
@@ -130,7 +131,8 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-            <div className="mt-4 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-bold">
+            <div className="mt-4 flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5">
+              <MorphingYarn />
               <SevillaClock />
             </div>
           </div>
