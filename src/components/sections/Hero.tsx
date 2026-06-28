@@ -14,22 +14,19 @@ export function Hero() {
   const underlineRef = useRef<SVGSVGElement>(null);
 
   const typeText = "EL HILO SE";
-  const revealText = "VUELVE ARTE";
+  const fullTyped = "EL HILO SE VUELVE ARTE";
   const [typed, setTyped] = useState("");
   const [showCursor, setShowCursor] = useState(true);
-  const [showReveal, setShowReveal] = useState(false);
 
   useEffect(() => {
     let i = 0;
     setTyped("");
-    setShowReveal(false);
     const timer = setInterval(() => {
-      if (i < typeText.length) {
-        setTyped(typeText.slice(0, i + 1));
+      if (i < fullTyped.length) {
+        setTyped(fullTyped.slice(0, i + 1));
         i++;
       } else {
         clearInterval(timer);
-        setTimeout(() => setShowReveal(true), 200);
       }
     }, 80);
     return () => clearInterval(timer);
@@ -39,6 +36,8 @@ export function Hero() {
     const blink = setInterval(() => setShowCursor((p) => !p), 530);
     return () => clearInterval(blink);
   }, []);
+
+  const firstLineDone = typed.length >= typeText.length;
 
   // Scroll-linked animation driven by GSAP ScrollTrigger:
   //  · the content drifts up and fades as you scroll past the hero
@@ -132,18 +131,18 @@ export function Hero() {
             className="font-climate max-w-5xl text-balance text-5xl leading-[1.05] tracking-tight text-neutral-900 sm:text-6xl md:text-7xl lg:text-8xl"
           >
             <span>
-              {typed}
-              <span className={`${showCursor ? "opacity-100" : "opacity-0"} transition-opacity`}>|</span>
+              {typed.length <= typeText.length ? typed : typeText}
+              {!firstLineDone && (
+                <span className={`${showCursor ? "opacity-100" : "opacity-0"} transition-opacity`}>|</span>
+              )}
             </span>
             <br />
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: showReveal ? 1 : 0 }}
-              transition={{ duration: 0.6 }}
-              className="relative inline-block"
-            >
+            <motion.span className="relative inline-block">
               <span className="relative z-10 bg-gradient-to-r from-candy-pink via-coral to-sun bg-clip-text text-transparent">
-                {revealText}
+                {typed.length > typeText.length ? typed.slice(typeText.length + 1) : ""}
+                {typed.length > typeText.length && (
+                  <span className={`${showCursor ? "opacity-100" : "opacity-0"} transition-opacity`}>|</span>
+                )}
               </span>
               {/* Tufted underline — gradient bar frayed into fuzzy yarn pile.
                   Its weave unravels with scroll (GSAP, see underlineRef). */}
