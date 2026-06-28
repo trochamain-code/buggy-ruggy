@@ -132,7 +132,7 @@ export function Wordmark({ className }: WordmarkProps) {
           strokeLinejoin="round"
         />
         {/* Fill pattern */}
-        <rect x="0" y="0" width="800" height="180" fill="url(#tuft-hatch)" opacity="0" />
+        <rect x="0" y="0" width="800" height="180" fill="url(#tuft-hatch)" opacity="0.35" />
       </svg>
     </div>
   );
