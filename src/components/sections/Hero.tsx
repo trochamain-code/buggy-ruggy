@@ -7,18 +7,18 @@ import { YarnParticles } from "@/components/ui/YarnParticles";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const SLOGAN_PAIRS = [
+  { first: "EL HILO SE", second: "VUELVE ARTE" },
+  { first: "PISA SOBRE", second: "TUS SUEÑOS" },
+  { first: "COLOR QUE", second: "SE TOCA" },
+  { first: "LANA CON", second: "ACTITUD" },
+] as const;
+
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const underlineRef = useRef<SVGSVGElement>(null);
-
-  const sloganPairs = [
-    { first: "EL HILO SE", second: "VUELVE ARTE" },
-    { first: "PISA SOBRE", second: "TUS SUEÑOS" },
-    { first: "COLOR QUE", second: "SE TOCA" },
-    { first: "LANA CON", second: "ACTITUD" },
-  ];
 
   const [pairIndex, setPairIndex] = useState(0);
   const [firstTyped, setFirstTyped] = useState("");
@@ -26,7 +26,7 @@ export function Hero() {
   const [phase, setPhase] = useState<"type1" | "type2" | "wait" | "del2" | "del1">("type1");
   const [showCursor, setShowCursor] = useState(true);
 
-  const currentPair = sloganPairs[pairIndex]!;
+  const currentPair = SLOGAN_PAIRS[pairIndex]!;
 
   // After typing completes, wait 3s then delete
   useEffect(() => {
@@ -92,7 +92,7 @@ export function Hero() {
             timeout = setTimeout(tick, speeds[phase]);
           } else {
             i = 0;
-            setPairIndex((prev) => (prev + 1) % sloganPairs.length);
+            setPairIndex((prev) => (prev + 1) % SLOGAN_PAIRS.length);
             setPhase("type1");
           }
           break;
@@ -106,7 +106,7 @@ export function Hero() {
       alive = false;
       clearTimeout(timeout);
     };
-  }, [phase, pairIndex, currentPair, sloganPairs.length]);
+    }, [phase, pairIndex]);
 
   useEffect(() => {
     const blink = setInterval(() => setShowCursor((p) => !p), 530);
