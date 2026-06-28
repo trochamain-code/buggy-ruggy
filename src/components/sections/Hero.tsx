@@ -102,7 +102,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-            className="font-climate mt-6 max-w-5xl text-balance text-5xl leading-[1.05] tracking-tight text-neutral-900 sm:text-6xl md:text-7xl lg:text-8xl"
+            className="font-climate max-w-5xl text-balance text-5xl leading-[1.05] tracking-tight text-neutral-900 sm:text-6xl md:text-7xl lg:text-8xl"
           >
             EL HILO SE 
             <br />
