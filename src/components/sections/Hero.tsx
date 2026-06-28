@@ -119,22 +119,6 @@ export function Hero() {
             <Play size={14} className="text-coral" />
           </motion.div>
 
-          {/* Hero logo showcase — gentle hover */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.85, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-8"
-          >
-            <a href="#" aria-label="buggy ruggy" className="inline-block">
-              <BuggyRuggyLogo
-                variant="breeze"
-                float
-                imgClassName="h-24 sm:h-32 lg:h-40"
-              />
-            </a>
-          </motion.div>
-
           {/* Main heading */}
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
