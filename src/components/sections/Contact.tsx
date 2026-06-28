@@ -35,7 +35,8 @@ export function Contact() {
 
   const interest = watch("interest");
 
-  const onSubmit = async () => {
+  const onSubmit = async (data: ContactFormData) => {
+    console.log("Form data:", data);
     await new Promise((resolve) => setTimeout(resolve, 1500));
     reset();
     alert("¡Gracias! Te contactaremos en 24-48 horas. 🎉");
@@ -103,7 +104,7 @@ export function Contact() {
               {[
                 {
                   icon: Mail,
-                  text: "hola@tapizalfombras.com",
+                  text: "hola@buggyruggy.com",
                   label: "Email",
                   color: "bg-candy-pink text-white",
                 },
@@ -115,7 +116,7 @@ export function Contact() {
                 },
                 {
                   icon: MapPin,
-                  text: "Calle del Arte, 42, Madrid",
+                  text: "Calle del Arte, 42, Sevilla",
                   label: "Taller",
                   color: "bg-grape text-white",
                 },

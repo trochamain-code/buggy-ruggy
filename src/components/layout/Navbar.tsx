@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Menu, X, Sparkles } from "lucide-react";
 import {
   motion,
@@ -37,13 +37,6 @@ export function Navbar() {
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     setScrolled(v > 0.015);
   });
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50">

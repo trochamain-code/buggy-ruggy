@@ -3,20 +3,20 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-candy-pink focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
   {
     variants: {
       variant: {
         default:
-          "bg-brand-600 text-white hover:bg-brand-700 shadow-lg shadow-brand-200 hover:shadow-brand-300 hover:-translate-y-0.5",
+          "bg-candy-pink text-white hover:brightness-90 shadow-lg shadow-candy-pink/30 hover:shadow-candy-pink/50 hover:-translate-y-0.5",
         secondary:
-          "bg-neutral-900 text-white hover:bg-neutral-800 shadow-lg shadow-neutral-200 hover:-translate-y-0.5",
+          "bg-neutral-900 text-white hover:brightness-90 shadow-lg shadow-neutral-200 hover:-translate-y-0.5",
         outline:
-          "border-2 border-neutral-200 bg-transparent text-neutral-900 hover:border-brand-300 hover:text-brand-700 hover:bg-brand-50",
+          "border-2 border-neutral-200 bg-transparent text-neutral-900 hover:border-candy-pink hover:text-candy-pink hover:bg-candy-pink-light",
         ghost:
           "bg-transparent text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100",
         accent:
-          "bg-accent-600 text-white hover:bg-accent-700 shadow-lg shadow-accent-200 hover:shadow-accent-300 hover:-translate-y-0.5",
+          "bg-coral text-white hover:brightness-90 shadow-lg shadow-coral/30 hover:shadow-coral/50 hover:-translate-y-0.5",
       },
       size: {
         sm: "h-9 px-4 text-sm",

@@ -97,7 +97,7 @@ export function Hero() {
 
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
-        className="relative z-10 mx-auto w-full max-w-7xl px-4 pt-24 sm:px-6 lg:px-8"
+        className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-28 pt-24 sm:px-6 lg:px-8"
       >
         <div className="flex flex-col items-center text-center">
           {/* Street kicker */}
@@ -108,7 +108,7 @@ export function Hero() {
             className="font-street mb-5 flex items-center gap-3 text-base uppercase tracking-[0.4em] text-neutral-400"
           >
             <span className="h-px w-8 bg-gradient-to-r from-transparent to-candy-pink" />
-            Studio de Tufting · Madrid
+            Studio de Tufting · Sevilla
             <span className="h-px w-8 bg-gradient-to-l from-transparent to-ocean" />
           </motion.p>
 
@@ -147,7 +147,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-            className="mt-6 max-w-5xl text-balance text-5xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-8xl"
+            className="font-climate mt-6 max-w-5xl text-balance text-5xl leading-[1.05] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-8xl"
           >
             TU ESPACIO,
             <br />
@@ -155,11 +155,13 @@ export function Hero() {
               <span className="relative z-10 bg-gradient-to-r from-candy-pink via-coral to-sun bg-clip-text text-transparent">
                 TUS REGLAS
               </span>
-              {/* Tufted underline — gradient bar frayed into fuzzy yarn pile */}
+              {/* Tufted underline — gradient bar frayed into fuzzy yarn pile.
+                  Its weave is knitted/unravelled by scroll (see underlineScale). */}
               <motion.svg
-                initial={{ scaleX: 0, rotate: -1.5 }}
-                animate={{ scaleX: 1, rotate: -1.5 }}
-                transition={{ duration: 0.7, delay: 0.7, ease: "easeOut" }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
+                style={{ scaleX: underlineScale, rotate: -1.5 }}
                 viewBox="0 0 320 22"
                 preserveAspectRatio="none"
                 aria-hidden
@@ -226,37 +228,7 @@ export function Hero() {
             </a>
           </motion.div>
 
-          {/* Fun stats row */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.9 }}
-            className="mt-16 flex flex-wrap items-center justify-center gap-6 rounded-3xl border border-white/10 bg-white/5 px-8 py-6 backdrop-blur-md sm:gap-12 sm:px-12"
-          >
-            {[
-              { emoji: "🧶", number: "200+", label: "Alfombras locas", color: "text-candy-pink" },
-              { emoji: "🎨", number: "50+", label: "Talleres divertidos", color: "text-ocean" },
-              { emoji: "✨", number: "100%", label: "A tu gusto", color: "text-grape" },
-              { emoji: "❤️", number: "4.9", label: "Estrellas Google", color: "text-coral" },
-            ].map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 1.1 + i * 0.1 }}
-                whileHover={{ y: -6, scale: 1.05 }}
-                className="cursor-default text-center"
-              >
-                <span className="text-2xl">{stat.emoji}</span>
-                <p className={`mt-1 text-2xl font-extrabold ${stat.color} sm:text-3xl`}>
-                  {stat.number}
-                </p>
-                <p className="mt-0.5 text-xs font-bold uppercase tracking-wider text-neutral-400">
-                  {stat.label}
-                </p>
-              </motion.div>
-            ))}
-          </motion.div>
+
         </div>
       </motion.div>
 
@@ -267,7 +239,7 @@ export function Hero() {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.6 }}
         style={{ opacity: contentOpacity }}
-        className="absolute bottom-24 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-neutral-400"
+        className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-neutral-400"
         aria-label="Desplázate hacia abajo"
       >
         <span className="text-xs font-bold uppercase tracking-widest">Scroll</span>
@@ -283,13 +255,11 @@ export function Hero() {
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-0">
         <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="h-16 w-full">
           <motion.path
-            initial={{ d: "M0,50 C360,50 360,0 720,0 C1080,0 1080,50 1440,50 L1440,100 L0,100 Z" }}
             d="M0,70 C360,100 360,20 720,20 C1080,20 1080,100 1440,70 L1440,100 L0,100 Z"
             fill="#ff2e7a"
             fillOpacity="0.15"
           />
           <motion.path
-            initial={{ d: "M0,60 C360,60 360,10 720,10 C1080,10 1080,60 1440,60 L1440,100 L0,100 Z" }}
             d="M0,80 C360,50 360,30 720,30 C1080,30 1080,50 1440,80 L1440,100 L0,100 Z"
             fill="#00b4d8"
             fillOpacity="0.12"

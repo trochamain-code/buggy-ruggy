@@ -8,15 +8,10 @@ const footerLinks = {
     { label: "Galería", href: "#galeria" },
     { label: "Pedidos Especiales", href: "#contacto" },
   ],
-  empresa: [
-    { label: "Sobre Nosotros", href: "#" },
-    { label: "Proceso Creativo", href: "#" },
-    { label: "Preguntas Frecuentes", href: "#" },
-  ],
   contacto: [
     { icon: Phone, text: "+34 612 345 678" },
     { icon: Mail, text: "hola@buggyruggy.com" },
-    { icon: MapPin, text: "Calle del Arte, 42, Madrid" },
+    { icon: MapPin, text: "Calle del Arte, 42, Sevilla" },
   ],
 };
 
@@ -32,7 +27,7 @@ export function Footer() {
       <span className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-ocean/20 blur-3xl" />
 
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
           <div>
             <a href="#" className="flex items-center" aria-label="buggy ruggy — inicio">
               <BuggyRuggyLogo imgClassName="h-14" />
@@ -63,24 +58,6 @@ export function Footer() {
 
           <div>
             <h4 className="font-street mb-4 text-xl uppercase tracking-[0.15em] text-ocean">
-              Empresa
-            </h4>
-            <ul className="space-y-3">
-              {footerLinks.empresa.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-sm font-semibold text-neutral-400 transition-colors hover:text-ocean"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-street mb-4 text-xl uppercase tracking-[0.15em] text-grape">
               Contacto
             </h4>
             <ul className="space-y-3">
@@ -96,14 +73,16 @@ export function Footer() {
             </ul>
             <div className="mt-6 flex gap-3">
               <a
-                href="#"
+                href="https://www.instagram.com/buggy.ruggy"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-candy-pink transition-all hover:scale-110 hover:border-candy-pink hover:bg-candy-pink hover:text-white hover:shadow-[0_0_18px_rgba(255,46,122,0.6)]"
                 aria-label="Instagram"
               >
                 <Instagram size={18} />
               </a>
               <a
-                href="#"
+                href="mailto:hola@buggyruggy.com"
                 className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-ocean transition-all hover:scale-110 hover:border-ocean hover:bg-ocean hover:text-white hover:shadow-[0_0_18px_rgba(0,180,216,0.6)]"
                 aria-label="Email"
               >
@@ -117,7 +96,7 @@ export function Footer() {
           <p className="text-xs font-semibold text-neutral-500">
             &copy; {new Date().getFullYear()} buggy ruggy. Hecho con{" "}
             <Heart size={12} className="inline fill-candy-pink text-candy-pink" />{" "}
-            en Madrid.
+            en Sevilla.
           </p>
           <p className="font-street text-sm uppercase tracking-[0.15em] text-neutral-500">
             Cada alfombra cuenta una historia

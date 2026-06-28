@@ -1,4 +1,4 @@
-import { ArrowUp } from "lucide-react";
+import { Instagram } from "lucide-react";
 import {
   motion,
   AnimatePresence,
@@ -8,11 +8,7 @@ import {
 } from "motion/react";
 import { useState } from "react";
 
-/**
- * Floating "back to top" button with an animated rainbow progress ring that
- * tracks how far down the page you've scrolled.
- */
-export function ScrollToTop() {
+export function InstagramFloatingButton() {
   const [visible, setVisible] = useState(false);
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, {
@@ -30,15 +26,17 @@ export function ScrollToTop() {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.button
+        <motion.a
+          href="https://www.instagram.com/buggy.ruggy"
+          target="_blank"
+          rel="noopener noreferrer"
           initial={{ opacity: 0, scale: 0, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0, y: 20 }}
           transition={{ type: "spring", stiffness: 300, damping: 22 }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          aria-label="Volver arriba"
+          aria-label="Instagram Buggy Ruggy"
           className="group fixed bottom-6 right-6 z-40 flex h-16 w-16 items-center justify-center rounded-full bg-white/80 shadow-[0_8px_30px_rgba(255,46,122,0.25)] backdrop-blur-xl"
         >
           <svg className="absolute inset-0 h-full w-full -rotate-90" viewBox="0 0 64 64">
@@ -69,11 +67,11 @@ export function ScrollToTop() {
               style={{ pathLength: progress }}
             />
           </svg>
-          <ArrowUp
+          <Instagram
             size={22}
-            className="text-candy-pink transition-transform duration-300 group-hover:-translate-y-0.5"
+            className="text-candy-pink transition-transform duration-300 group-hover:scale-110"
           />
-        </motion.button>
+        </motion.a>
       )}
     </AnimatePresence>
   );

@@ -6,8 +6,7 @@ import { CustomDesign } from "@/components/sections/CustomDesign";
 import { Workshops } from "@/components/sections/Workshops";
 import { Contact } from "@/components/sections/Contact";
 import { CursorGlow } from "@/components/ui/CursorGlow";
-import { ScrollToTop } from "@/components/ui/ScrollToTop";
-import { Marquee } from "@/components/ui/Marquee";
+import { InstagramFloatingButton } from "@/components/ui/InstagramFloatingButton";
 import { SvgFilters } from "@/components/ui/SvgFilters";
 
 function App() {
@@ -18,14 +17,13 @@ function App() {
       <Navbar />
       <main>
         <Hero />
-        <Marquee />
         <Gallery />
         <CustomDesign />
         <Workshops />
         <Contact />
       </main>
       <Footer />
-      <ScrollToTop />
+      <InstagramFloatingButton />
     </>
   );
 }
