@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect } from "react";
+import { useRef, useLayoutEffect, useState, useEffect } from "react";
 import { motion } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -12,6 +12,29 @@ export function Hero() {
   const contentRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const underlineRef = useRef<SVGSVGElement>(null);
+
+  const fullText = "EL HILO SE VUELVE ARTE";
+  const [typed, setTyped] = useState("");
+  const [showCursor, setShowCursor] = useState(true);
+
+  useEffect(() => {
+    let i = 0;
+    setTyped("");
+    const timer = setInterval(() => {
+      if (i < fullText.length) {
+        setTyped(fullText.slice(0, i + 1));
+        i++;
+      } else {
+        clearInterval(timer);
+      }
+    }, 80);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const blink = setInterval(() => setShowCursor((p) => !p), 530);
+    return () => clearInterval(blink);
+  }, []);
 
   // Scroll-linked animation driven by GSAP ScrollTrigger:
   //  · the content drifts up and fades as you scroll past the hero
@@ -152,6 +175,17 @@ export function Hero() {
             <span className="text-coral">atrevidas</span> y{" "}
             <span className="text-grape">divertidas</span>. ¡Y te enseñamos a
             hacer la tuya en nuestros talleres!
+          </motion.p>
+
+          {/* Typing effect */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="mt-3 font-street text-3xl uppercase tracking-[0.2em] text-candy-pink sm:text-4xl"
+          >
+            {typed}
+            <span className={`${showCursor ? "opacity-100" : "opacity-0"} transition-opacity`}>|</span>
           </motion.p>
 
           {/* CTAs */}
