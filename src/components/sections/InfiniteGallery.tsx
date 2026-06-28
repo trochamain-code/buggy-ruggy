@@ -20,7 +20,10 @@ export function InfiniteGallery() {
           🖼️ Galería
         </span>
         <h2 className="mt-4 font-climate text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-          100+ alfombras{' '}
+          100+{' '}
+          <span className="font-horizon tracking-[0.05em]">
+            alfombras
+          </span>{' '}
           <span className="bg-gradient-to-r from-candy-pink via-coral to-sun bg-clip-text text-transparent tracking-[0.15em]">
             ÚNICAS
           </span>
