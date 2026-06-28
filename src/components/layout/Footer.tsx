@@ -47,20 +47,29 @@ export function Footer() {
       <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         {/* CTA section */}
         <div className="mb-10 text-center">
-          <SplitText
-            as="h2"
-            type="words"
-            stagger={0.06}
-            duration={0.6}
-            from={{ opacity: 0, y: 40, rotateX: 0 }}
-            className="font-climate mt-8 text-2xl font-extrabold tracking-tight text-white sm:text-3xl lg:text-4xl"
-          >
-            ¿List@ para{" "}
-            <span className="font-horizon bg-gradient-to-r from-candy-pink via-coral to-sun bg-clip-text text-transparent">
+          <div className="flex flex-wrap items-center justify-center gap-x-3 font-climate text-2xl font-extrabold tracking-tight text-white sm:text-3xl lg:text-4xl">
+            <SplitText
+              as="span"
+              type="words"
+              stagger={0.06}
+              duration={0.6}
+              from={{ opacity: 0, y: 40, rotateX: 0 }}
+            >
+              ¿List@ para
+            </SplitText>
+            <span className="font-horizon bg-gradient-to-r from-candy-pink via-coral to-sun bg-clip-text text-transparent text-3xl sm:text-4xl lg:text-5xl">
               DISFRUTAR
-            </span>{" "}
-            la tuya?
-          </SplitText>
+            </span>
+            <SplitText
+              as="span"
+              type="words"
+              stagger={0.06}
+              duration={0.6}
+              from={{ opacity: 0, y: 40, rotateX: 0 }}
+            >
+              la tuya?
+            </SplitText>
+          </div>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
