@@ -28,14 +28,36 @@ export function Hero() {
 
   const currentPair = sloganPairs[pairIndex]!;
 
+  // After typing completes, wait 3s then delete
+  useEffect(() => {
+    if (phase !== "wait") return;
+    const t = setTimeout(() => setPhase("del2"), 3000);
+    return () => clearTimeout(t);
+  }, [phase]);
+
+  // Reset text when slogan changes
+  useEffect(() => {
+    setFirstTyped("");
+    setSecondTyped("");
+  }, [pairIndex]);
+
   useEffect(() => {
     let i = 0;
+    let timeout: ReturnType<typeof setTimeout>;
+    let alive = true;
+
+    const speeds: Record<typeof phase, number> = {
+      type1: 70, type2: 70, wait: 99999, del2: 35, del1: 35,
+    };
+
     const tick = () => {
+      if (!alive) return;
       switch (phase) {
         case "type1": {
           if (i <= currentPair.first.length) {
             setFirstTyped(currentPair.first.slice(0, i));
             i++;
+            timeout = setTimeout(tick, speeds[phase]);
           } else {
             i = 0;
             setPhase("type2");
@@ -46,8 +68,7 @@ export function Hero() {
           if (i <= currentPair.second.length) {
             setSecondTyped(currentPair.second.slice(0, i));
             i++;
-          } else {
-            setTimeout(() => setPhase("wait"), 3000);
+            timeout = setTimeout(tick, speeds[phase]);
           }
           break;
         }
@@ -57,6 +78,7 @@ export function Hero() {
           if (i < currentPair.second.length) {
             setSecondTyped(currentPair.second.slice(0, currentPair.second.length - i - 1));
             i++;
+            timeout = setTimeout(tick, speeds[phase]);
           } else {
             i = 0;
             setPhase("del1");
@@ -67,6 +89,7 @@ export function Hero() {
           if (i < currentPair.first.length) {
             setFirstTyped(currentPair.first.slice(0, currentPair.first.length - i - 1));
             i++;
+            timeout = setTimeout(tick, speeds[phase]);
           } else {
             i = 0;
             setPairIndex((prev) => (prev + 1) % sloganPairs.length);
@@ -77,11 +100,12 @@ export function Hero() {
       }
     };
 
-    const speeds: Record<typeof phase, number> = {
-      type1: 70, type2: 70, wait: 99999, del2: 35, del1: 35,
+    timeout = setTimeout(tick, 200);
+
+    return () => {
+      alive = false;
+      clearTimeout(timeout);
     };
-    const timer = setInterval(tick, speeds[phase]);
-    return () => clearInterval(timer);
   }, [phase, pairIndex, currentPair, sloganPairs.length]);
 
   useEffect(() => {
