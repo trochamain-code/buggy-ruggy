@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
+import { createPortal } from "react-dom";
 import gsap from "gsap";
 import { X } from "lucide-react";
 import { InfiniteSlider } from "@/components/ui/infinite-slider-horizontal";
@@ -25,14 +26,17 @@ export function InfiniteGallery() {
 
   useEffect(() => {
     if (lightbox === null || !overlayRef.current || !imgRef.current) return;
-    const tl = gsap.timeline();
-    tl.fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.out" });
-    tl.fromTo(
-      imgRef.current,
-      { scale: 0.85, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.4)" },
-      "-=0.2",
-    );
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline();
+      tl.fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.out" });
+      tl.fromTo(
+        imgRef.current,
+        { scale: 0.85, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(1.4)" },
+        "-=0.2",
+      );
+    });
+    return () => ctx.revert();
   }, [lightbox]);
 
   const closeLightbox = useCallback(() => {
@@ -40,15 +44,14 @@ export function InfiniteGallery() {
       setLightbox(null);
       return;
     }
-    const tl = gsap.timeline({
-      onComplete: () => setLightbox(null),
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        onComplete: () => setLightbox(null),
+      });
+      tl.to(imgRef.current, { scale: 0.9, opacity: 0, duration: 0.25, ease: "power2.in" });
+      tl.to(overlayRef.current, { opacity: 0, duration: 0.3, ease: "power2.in" }, "-=0.15");
     });
-    tl.to(imgRef.current, { scale: 0.9, opacity: 0, duration: 0.25, ease: "power2.in" });
-    tl.to(
-      overlayRef.current,
-      { opacity: 0, duration: 0.3, ease: "power2.in" },
-      "-=0.15",
-    );
+    return () => ctx.revert();
   }, []);
 
   useEffect(() => {
@@ -125,32 +128,36 @@ export function InfiniteGallery() {
         ))}
       </div>
 
-      {lightbox !== null && lightboxSrc && (
-        <div
-          ref={overlayRef}
-          className="fixed inset-0 z-50 backdrop-blur-xl bg-neutral-950/70 flex items-center justify-center"
-          onClick={closeLightbox}
-        >
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              closeLightbox();
-            }}
-            className="absolute right-4 top-4 z-20 rounded-xl bg-white/10 p-3 text-white backdrop-blur-md transition-all hover:bg-white/20 hover:scale-110"
-            aria-label="Cerrar"
+      {/* Portal: renders at document.body, outside #smooth-content, so fixed works */}
+      {lightbox !== null &&
+        lightboxSrc &&
+        createPortal(
+          <div
+            ref={overlayRef}
+            className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl bg-neutral-950/70"
+            onClick={closeLightbox}
           >
-            <X size={24} />
-          </button>
-          <img
-            ref={imgRef}
-            src={lightboxSrc.src}
-            alt={lightboxSrc.alt}
-            className="max-h-[85vh] max-w-[90vw] rounded-2xl object-contain shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-            draggable={false}
-          />
-        </div>
-      )}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                closeLightbox();
+              }}
+              className="absolute right-4 top-4 z-20 rounded-xl bg-white/10 p-3 text-white backdrop-blur-md transition-all hover:bg-white/20 hover:scale-110"
+              aria-label="Cerrar"
+            >
+              <X size={24} />
+            </button>
+            <img
+              ref={imgRef}
+              src={lightboxSrc.src}
+              alt={lightboxSrc.alt}
+              className="max-h-[85vh] max-w-[90vw] rounded-2xl object-contain shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+              draggable={false}
+            />
+          </div>,
+          document.body,
+        )}
     </section>
   );
 }
