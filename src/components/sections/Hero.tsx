@@ -2,8 +2,7 @@ import { useRef, useLayoutEffect } from "react";
 import { motion } from "motion/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowRight, Sparkles, Play, ChevronDown } from "lucide-react";
-import { ScrambleText } from "@/components/ui/ScrambleText";
+import { ArrowRight, Sparkles, ChevronDown } from "lucide-react";
 import { YarnParticles } from "@/components/ui/YarnParticles";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -97,26 +96,6 @@ export function Hero() {
             Studio de Tufting · Sevilla
             <span className="h-px w-8 bg-gradient-to-l from-transparent to-ocean" />
           </motion.p>
-
-          {/* Pill badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 40, scale: 0.8 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="flex items-center gap-2 rounded-full border border-candy-pink/40 bg-white/75 px-5 py-2 shadow-candy backdrop-blur-md"
-          >
-            <Sparkles size={16} className="text-candy-pink" />
-            <ScrambleText
-              className="text-sm font-bold text-candy-pink"
-              scrollTrigger={false}
-              scrambleChars="!<>-_\\/[]{}—=+*^?#________"
-              revealDelay={0.6}
-              duration={0.8}
-            >
-              ¡Taller creativo cada finde!
-            </ScrambleText>
-            <Play size={14} className="text-coral" />
-          </motion.div>
 
           {/* Main heading */}
           <motion.h1
