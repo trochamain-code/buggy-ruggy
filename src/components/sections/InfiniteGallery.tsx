@@ -75,7 +75,7 @@ export function InfiniteGallery() {
     <section id="galeria" className="relative bg-[#0a1a2a] py-20 overflow-hidden">
       <div className="mb-10 text-center px-4">
         <span className="inline-flex items-center gap-2 rounded-full bg-lime/20 px-4 py-1.5 text-sm font-extrabold text-lime">
-          🖼️ Galería
+          Galería
         </span>
         <h2 className="mt-4 font-climate text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
           100+{' '}
