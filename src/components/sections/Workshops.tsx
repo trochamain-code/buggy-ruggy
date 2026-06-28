@@ -130,8 +130,8 @@ export function Workshops() {
                 {/* Background image */}
                 <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-110">
                   <img
-                    src={image.src}
-                    alt={image.alt}
+                    src={image!.src}
+                    alt={image!.alt}
                     className="h-full w-full object-cover"
                     loading="lazy"
                   />

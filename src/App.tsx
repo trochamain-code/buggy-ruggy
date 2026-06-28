@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Hero } from "@/components/sections/Hero";
-import { ThreeGallery } from "@/components/sections/ThreeGallery";
+import { InfiniteGallery } from "@/components/sections/InfiniteGallery";
 import { CustomDesign } from "@/components/sections/CustomDesign";
 import { Workshops } from "@/components/sections/Workshops";
 import { Contact } from "@/components/sections/Contact";
@@ -29,7 +29,7 @@ function App() {
           <YarnThread className="z-0" />
           <main>
             <Hero />
-            <ThreeGallery />
+            <InfiniteGallery />
             <CustomDesign />
             <Workshops />
             <Contact />
