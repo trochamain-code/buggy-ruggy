@@ -61,7 +61,7 @@ export function Hero() {
       {/* Looping tufting-machine background video — fixed full-viewport */}
       <video
         ref={videoRef}
-        className="fixed inset-0 z-0 h-screen w-screen object-cover"
+        className="fixed inset-0 z-0 h-screen w-screen object-cover object-[30%_center] sm:object-center"
         autoPlay
         muted
         loop
