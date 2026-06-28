@@ -56,9 +56,9 @@ export function Navbar() {
         transition={{ type: "spring", stiffness: 320, damping: 30 }}
         className={cn(
           "relative mx-3 flex max-w-7xl items-center justify-between overflow-hidden rounded-[1.6rem] border border-white/10 px-4 sm:mx-6 sm:px-6 lg:mx-auto lg:px-8",
-          "bg-neutral-950/90 transition-[box-shadow,background] duration-500",
+          "bg-neutral-950/50 backdrop-blur-2xl transition-[box-shadow,background] duration-500",
           scrolled
-            ? "shadow-neon backdrop-blur-2xl"
+            ? "shadow-neon bg-neutral-950/70"
             : "shadow-[0_12px_40px_-12px_rgba(0,0,0,0.5)]",
         )}
       >
