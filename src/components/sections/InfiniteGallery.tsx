@@ -72,12 +72,9 @@ export function InfiniteGallery() {
   const lightboxSrc = lightbox !== null ? galleryImages[lightbox] : null;
 
   return (
-    <section id="galeria" className="relative bg-[#0a1a2a] py-20 overflow-hidden">
+    <section id="galeria" className="relative bg-[#0a1a2a] py-10 overflow-hidden">
       <div className="mb-10 text-center px-4">
-        <span className="inline-flex items-center gap-2 rounded-full bg-lime/20 px-4 py-1.5 text-sm font-extrabold text-lime">
-          Galería
-        </span>
-        <h2 className="mt-4 font-climate text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+        <h2 className="font-climate text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
           100+{' '}
           <span className="font-horizon tracking-[0.05em]">alfombras</span>{' '}
           <span className="bg-gradient-to-r from-candy-pink via-coral to-sun bg-clip-text text-transparent tracking-[0.15em]">

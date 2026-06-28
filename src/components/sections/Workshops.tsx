@@ -108,15 +108,8 @@ export function Workshops() {
       <div className="flex min-h-screen flex-col pt-24 lg:pt-32">
         <div ref={headerRef} className="mx-auto w-full max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full bg-sun-light px-4 py-1.5 text-sm font-extrabold text-sun">
-              <Paintbrush size={16} /> Talleres Creativos
-            </span>
             <SplitText className="mt-6 text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl">
-              Aprende, crea,{" "}
-              <span className="font-climate bg-gradient-to-r from-candy-pink via-coral via-sun via-lime via-ocean to-grape bg-clip-text text-transparent">
-                ensúciate
-              </span>{" "}
-              las manos
+              Aprende, imagína, crea
             </SplitText>
             <p className="mt-4 text-lg font-semibold leading-relaxed text-neutral-500">
               Talleres presenciales donde{" "}
@@ -272,12 +265,6 @@ export function Workshops() {
               >
                 ¡Reservar Plaza!
               </a>
-              <button
-                onClick={() => setSelected(null)}
-                className="rounded-2xl border-2 border-neutral-200 bg-white px-6 py-3.5 text-base font-extrabold text-neutral-600 transition-all hover:bg-neutral-100"
-              >
-                Cerrar
-              </button>
             </div>
           </>
         )}

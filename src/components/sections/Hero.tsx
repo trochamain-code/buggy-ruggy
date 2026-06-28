@@ -142,11 +142,11 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
             className="font-climate mt-6 max-w-5xl text-balance text-5xl leading-[1.05] tracking-tight text-neutral-900 sm:text-6xl md:text-7xl lg:text-8xl"
           >
-            TU ESPACIO,
+            DONDE EL HILO
             <br />
             <span className="relative inline-block">
               <span className="relative z-10 bg-gradient-to-r from-candy-pink via-coral to-sun bg-clip-text text-transparent">
-                TUS REGLAS
+                SE VUELVE ARTE
               </span>
               {/* Tufted underline — gradient bar frayed into fuzzy yarn pile.
                   Its weave unravels with scroll (GSAP, see underlineRef). */}
