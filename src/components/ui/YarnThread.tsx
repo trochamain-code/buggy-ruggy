@@ -34,7 +34,6 @@ export function YarnThread({ className }: YarnThreadProps) {
             start: "top 80%",
             end: "bottom 60%",
             scrub: 0.5,
-            scroller: "#smooth-wrapper",
           },
         },
       );
@@ -55,7 +54,6 @@ export function YarnThread({ className }: YarnThreadProps) {
             start: "top 80%",
             end: "bottom 60%",
             scrub: 0.5,
-            scroller: "#smooth-wrapper",
           },
         });
       }
