@@ -8,22 +8,37 @@ import { Contact } from "@/components/sections/Contact";
 import { CursorGlow } from "@/components/ui/CursorGlow";
 import { InstagramFloatingButton } from "@/components/ui/InstagramFloatingButton";
 import { SvgFilters } from "@/components/ui/SvgFilters";
+import { YarnToy } from "@/components/ui/YarnToy";
+import { YarnThread } from "@/components/ui/YarnThread";
+import { useScrollSmoother } from "@/hooks/useScrollSmoother";
 
 function App() {
+  // GSAP ScrollSmoother — inertia + parallax scroll (foundation for the
+  // ScrollTrigger / DrawSVG / MotionPath effects). Fixed UI stays outside the
+  // smoothed content so position:fixed keeps working.
+  useScrollSmoother();
+
   return (
     <>
       <SvgFilters />
       <CursorGlow />
       <Navbar />
-      <main>
-        <Hero />
-        <AnimatedGallery />
-        <CustomDesign />
-        <Workshops />
-        <Contact />
-      </main>
-      <Footer />
       <InstagramFloatingButton />
+      <YarnToy />
+
+      <div id="smooth-wrapper">
+        <div id="smooth-content">
+          <YarnThread className="z-0" />
+          <main>
+            <Hero />
+            <AnimatedGallery />
+            <CustomDesign />
+            <Workshops />
+            <Contact />
+          </main>
+          <Footer />
+        </div>
+      </div>
     </>
   );
 }

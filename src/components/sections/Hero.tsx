@@ -1,102 +1,87 @@
-import { useRef } from "react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useMotionValue,
-  useSpring,
-} from "motion/react";
+import { useRef, useLayoutEffect } from "react";
+import { motion } from "motion/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, Sparkles, Play, ChevronDown } from "lucide-react";
 import { BuggyRuggyLogo } from "@/components/ui/BuggyRuggyLogo";
 
-const floatingBlobs = [
-  { color: "bg-candy-pink/40", size: "h-72 w-72", left: "-5%", top: "10%", delay: 0, depth: 30 },
-  { color: "bg-ocean/30", size: "h-56 w-56", left: "75%", top: "5%", delay: 1.5, depth: -40 },
-  { color: "bg-sun/50", size: "h-64 w-64", left: "55%", top: "60%", delay: 0.8, depth: 50 },
-  { color: "bg-lime/35", size: "h-48 w-48", left: "20%", top: "70%", delay: 2.2, depth: -25 },
-  { color: "bg-grape/30", size: "h-52 w-52", left: "85%", top: "45%", delay: 1.0, depth: 35 },
-  { color: "bg-coral/35", size: "h-40 w-40", left: "40%", top: "25%", delay: 3.0, depth: -50 },
-  { color: "bg-berry/25", size: "h-60 w-60", left: "10%", top: "80%", delay: 1.8, depth: 20 },
-  { color: "bg-sky/30", size: "h-44 w-44", left: "65%", top: "30%", delay: 2.5, depth: -30 },
-];
-
-const colorBursts = [
-  { color: "#ff2e7a", cx: 120, cy: 80, r: 18 },
-  { color: "#ff6b35", cx: 250, cy: 180, r: 14 },
-  { color: "#ffd60a", cx: 380, cy: 60, r: 22 },
-  { color: "#34d399", cx: 500, cy: 160, r: 16 },
-  { color: "#00b4d8", cx: 180, cy: 200, r: 20 },
-  { color: "#a855f7", cx: 450, cy: 210, r: 12 },
-  { color: "#ec4899", cx: 300, cy: 120, r: 15 },
-  { color: "#60a5fa", cx: 550, cy: 90, r: 18 },
-];
+gsap.registerPlugin(ScrollTrigger);
 
 export function Hero() {
-  const ref = useRef<HTMLElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const underlineRef = useRef<SVGSVGElement>(null);
 
-  // Scroll-linked parallax: content drifts up & fades as you scroll past.
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, 140]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
-  const blobsY = useTransform(scrollYProgress, [0, 1], [0, -120]);
-  // The tufted underline weaves (full at the top) and unravels from the right
-  // as you scroll through the hero — and re-weaves when you scroll back up.
-  const underlineScale = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  // Scroll-linked animation driven by GSAP ScrollTrigger:
+  //  · the content drifts up and fades as you scroll past the hero
+  //  · the tufting video gently zooms in (parallax depth)
+  //  · the tufted underline unravels (its weave undoes from the right)
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const through = {
+        trigger: sectionRef.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
+      };
 
-  // Mouse-driven parallax for the blobs.
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const smx = useSpring(mx, { stiffness: 60, damping: 20 });
-  const smy = useSpring(my, { stiffness: 60, damping: 20 });
+      gsap.to(contentRef.current, { y: 150, ease: "none", scrollTrigger: through });
+      gsap.to(contentRef.current, {
+        opacity: 0,
+        ease: "none",
+        scrollTrigger: { trigger: sectionRef.current, start: "top top", end: "center top", scrub: true },
+      });
+      gsap.to(videoRef.current, { scale: 1.14, ease: "none", scrollTrigger: through });
 
-  const handleMouse = (e: React.MouseEvent<HTMLElement>) => {
-    const { innerWidth, innerHeight } = window;
-    mx.set((e.clientX / innerWidth - 0.5) * 2);
-    my.set((e.clientY / innerHeight - 0.5) * 2);
-  };
+      if (underlineRef.current) {
+        gsap.fromTo(
+          underlineRef.current,
+          { scaleX: 1 },
+          {
+            scaleX: 0,
+            transformOrigin: "left center",
+            ease: "none",
+            scrollTrigger: { trigger: sectionRef.current, start: "top top", end: "center top", scrub: true },
+          },
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
-      ref={ref}
-      onMouseMove={handleMouse}
-      className="relative flex min-h-screen items-center overflow-hidden bg-gradient-to-br from-neutral-950 via-[#1a0b2e] to-neutral-900"
+      ref={sectionRef}
+      className="relative flex min-h-screen items-center overflow-hidden bg-white"
     >
-      {/* Gritty grain overlay */}
-      <span className="bg-grain pointer-events-none absolute inset-0 opacity-[0.13] mix-blend-overlay" />
-
-      {/* Floating colorful blobs with scroll + mouse parallax */}
-      <motion.div style={{ y: blobsY }} className="pointer-events-none absolute inset-0">
-        {floatingBlobs.map((blob, i) => (
-          <Blob key={i} blob={blob} smx={smx} smy={smy} />
-        ))}
-      </motion.div>
-
-      {/* SVG paint splatters at bottom */}
-      <svg
-        className="pointer-events-none absolute bottom-0 left-0 w-full"
-        viewBox="0 0 600 300"
-        preserveAspectRatio="none"
-        height="150"
-        xmlns="http://www.w3.org/2000/svg"
+      {/* Looping tufting-machine background video (white studio, grey shadow) */}
+      <video
+        ref={videoRef}
+        className="absolute inset-0 h-full w-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+        poster="/tufting-hero.jpg"
+        aria-hidden
       >
-        {colorBursts.map((b, i) => (
-          <motion.circle
-            key={i}
-            initial={{ r: 0, opacity: 0 }}
-            animate={{ r: b.r, opacity: 0.85 }}
-            transition={{ duration: 0.6, delay: 0.3 + i * 0.08, ease: "easeOut" }}
-            cx={b.cx}
-            cy={b.cy}
-            fill={b.color}
-          />
-        ))}
-      </svg>
+        <source src="/tufting-hero.mp4" type="video/mp4" />
+      </video>
 
-      <motion.div
-        style={{ y: contentY, opacity: contentOpacity }}
+      {/* Readability layer: soft white wash + a glow behind the text so the
+          dark copy stays legible over the colorful spinning yarn. */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(58% 52% at 50% 46%, rgba(255,255,255,0.82), rgba(255,255,255,0.32) 60%, rgba(255,255,255,0) 78%), linear-gradient(to bottom, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 22%, rgba(255,255,255,0) 70%, rgba(255,255,255,0.9) 100%)",
+        }}
+      />
+
+      <div
+        ref={contentRef}
         className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-28 pt-24 sm:px-6 lg:px-8"
       >
         <div className="flex flex-col items-center text-center">
@@ -105,7 +90,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="font-street mb-5 flex items-center gap-3 text-base uppercase tracking-[0.4em] text-neutral-400"
+            className="font-street mb-5 flex items-center gap-3 text-base uppercase tracking-[0.4em] text-neutral-500"
           >
             <span className="h-px w-8 bg-gradient-to-r from-transparent to-candy-pink" />
             Studio de Tufting · Sevilla
@@ -117,7 +102,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 40, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="flex items-center gap-2 rounded-full border border-candy-pink/40 bg-white/5 px-5 py-2 backdrop-blur-md"
+            className="flex items-center gap-2 rounded-full border border-candy-pink/40 bg-white/75 px-5 py-2 shadow-candy backdrop-blur-md"
           >
             <Sparkles size={16} className="text-candy-pink" />
             <span className="text-sm font-bold text-candy-pink">
@@ -147,7 +132,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15, ease: "easeOut" }}
-            className="font-climate mt-6 max-w-5xl text-balance text-5xl leading-[1.05] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-8xl"
+            className="font-climate mt-6 max-w-5xl text-balance text-5xl leading-[1.05] tracking-tight text-neutral-900 sm:text-6xl md:text-7xl lg:text-8xl"
           >
             TU ESPACIO,
             <br />
@@ -156,12 +141,9 @@ export function Hero() {
                 TUS REGLAS
               </span>
               {/* Tufted underline — gradient bar frayed into fuzzy yarn pile.
-                  Its weave is knitted/unravelled by scroll (see underlineScale). */}
-              <motion.svg
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
-                style={{ scaleX: underlineScale, rotate: -1.5 }}
+                  Its weave unravels with scroll (GSAP, see underlineRef). */}
+              <svg
+                ref={underlineRef}
                 viewBox="0 0 320 22"
                 preserveAspectRatio="none"
                 aria-hidden
@@ -183,7 +165,7 @@ export function Hero() {
                   fill="url(#tuft-underline-grad)"
                   filter="url(#tuft-bar)"
                 />
-              </motion.svg>
+              </svg>
             </span>
           </motion.h1>
 
@@ -192,7 +174,7 @@ export function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-6 max-w-xl text-balance text-lg font-semibold leading-relaxed text-neutral-300 md:text-xl"
+            className="mt-6 max-w-xl text-balance text-lg font-semibold leading-relaxed text-neutral-700 md:text-xl"
           >
             Diseñamos alfombras tan{" "}
             <span className="text-candy-pink">únicas</span> como tú.{" "}
@@ -221,16 +203,14 @@ export function Hero() {
             </a>
             <a
               href="#talleres"
-              className="font-street group inline-flex rotate-1 items-center gap-2 rounded-2xl border-2 border-ocean bg-transparent px-8 py-3.5 text-2xl uppercase tracking-[0.08em] text-ocean shadow-[0_0_24px_rgba(0,180,216,0.35)] transition-all duration-300 hover:rotate-0 hover:-translate-y-1 hover:bg-ocean hover:text-white"
+              className="font-street group inline-flex rotate-1 items-center gap-2 rounded-2xl border-2 border-ocean bg-white/70 px-8 py-3.5 text-2xl uppercase tracking-[0.08em] text-ocean shadow-[0_0_24px_rgba(0,180,216,0.35)] backdrop-blur-sm transition-all duration-300 hover:rotate-0 hover:-translate-y-1 hover:bg-ocean hover:text-white"
             >
               <Sparkles size={20} />
               Reservar Taller
             </a>
           </motion.div>
-
-
         </div>
-      </motion.div>
+      </div>
 
       {/* Animated scroll cue */}
       <motion.a
@@ -238,8 +218,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.6 }}
-        style={{ opacity: contentOpacity }}
-        className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-neutral-400"
+        className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-neutral-500"
         aria-label="Desplázate hacia abajo"
       >
         <span className="text-xs font-bold uppercase tracking-widest">Scroll</span>
@@ -250,46 +229,6 @@ export function Hero() {
           <ChevronDown size={22} className="text-candy-pink" />
         </motion.span>
       </motion.a>
-
-      {/* Bottom wavy color bar */}
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-0">
-        <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="h-16 w-full">
-          <motion.path
-            d="M0,70 C360,100 360,20 720,20 C1080,20 1080,100 1440,70 L1440,100 L0,100 Z"
-            fill="#ff2e7a"
-            fillOpacity="0.15"
-          />
-          <motion.path
-            d="M0,80 C360,50 360,30 720,30 C1080,30 1080,50 1440,80 L1440,100 L0,100 Z"
-            fill="#00b4d8"
-            fillOpacity="0.12"
-          />
-        </svg>
-      </div>
     </section>
-  );
-}
-
-/* Individual blob: entrance animation + mouse parallax based on its depth. */
-function Blob({
-  blob,
-  smx,
-  smy,
-}: {
-  blob: (typeof floatingBlobs)[number];
-  smx: ReturnType<typeof useSpring>;
-  smy: ReturnType<typeof useSpring>;
-}) {
-  const x = useTransform(smx, (v) => v * blob.depth);
-  const y = useTransform(smy, (v) => v * blob.depth);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 1.2, delay: blob.delay, ease: "easeOut" }}
-      style={{ left: blob.left, top: blob.top, x, y }}
-      className={`absolute ${blob.color} ${blob.size} rounded-full blur-3xl`}
-    />
   );
 }

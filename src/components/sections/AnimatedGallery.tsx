@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { SplitText } from "@/components/ui/SplitText";
 import {
   ContainerScroll,
   ContainerSticky,
@@ -29,12 +30,12 @@ export function AnimatedGallery() {
           </span>
         </ContainerAnimated>
         <ContainerAnimated>
-          <h2 className="mt-6 text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl">
-            Desliza para ver la{' '}
+          <SplitText className="mt-6 text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl">
+            Desliza para ver la{" "}
             <span className="bg-gradient-to-r from-candy-pink via-coral to-sun bg-clip-text text-transparent">
               magia
             </span>
-          </h2>
+          </SplitText>
         </ContainerAnimated>
         <ContainerAnimated>
           <p className="mt-4 text-lg font-semibold leading-relaxed text-neutral-500">

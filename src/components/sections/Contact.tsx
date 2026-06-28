@@ -6,6 +6,7 @@ import { Send, Mail, Phone, MapPin, Heart } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { asset } from "@/lib/utils";
+import { SplitText } from "@/components/ui/SplitText";
 
 const contactSchema = z.object({
   name: z.string().min(2, "¡Dinos tu nombre! (mín. 2 letras)"),
@@ -87,13 +88,13 @@ export function Contact() {
             <span className="inline-flex items-center gap-2 rounded-full bg-coral-light px-4 py-1.5 text-sm font-extrabold text-coral">
               <Heart size={16} /> Contacto
             </span>
-            <h2 className="mt-6 text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl">
-              ¿Hablamos de{' '}
+            <SplitText className="mt-6 text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl">
+              ¿Hablamos de{" "}
               <span className="bg-gradient-to-r from-candy-pink via-coral to-sun bg-clip-text text-transparent">
                 tu proyecto
               </span>
               ?
-            </h2>
+            </SplitText>
             <p className="mt-4 text-lg font-semibold leading-relaxed text-neutral-500">
               Sin compromiso, solo{' '}
               <span className="text-candy-pink">ideas chulas</span>. Cuéntanos

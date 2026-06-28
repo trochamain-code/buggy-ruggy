@@ -1,5 +1,13 @@
+import { useRef } from "react";
+import gsap from "gsap";
+import { SplitText } from "gsap/SplitText";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Instagram, Mail, MapPin, Phone, Heart } from "lucide-react";
-import { BuggyRuggyLogo } from "@/components/ui/BuggyRuggyLogo";
+import { Wordmark } from "@/components/ui/Wordmark";
+import { SevillaClock } from "@/components/ui/SevillaClock";
+import { YarnToy } from "@/components/ui/YarnToy";
+
+gsap.registerPlugin(SplitText, ScrollTrigger);
 
 const footerLinks = {
   servicios: [
@@ -13,7 +21,53 @@ const footerLinks = {
     { icon: Mail, text: "hola@buggyruggy.com" },
     { icon: MapPin, text: "Calle del Arte, 42, Sevilla" },
   ],
+  social: [
+    { label: "Instagram", href: "https://www.instagram.com/buggy.ruggy", icon: Instagram },
+    { label: "Email", href: "mailto:hola@buggyruggy.com", icon: Mail },
+  ],
 };
+
+function SocialLink({ label, href, icon: Icon }: (typeof footerLinks.social)[number]) {
+  const ref = useRef<HTMLAnchorElement>(null);
+
+  const handleMouseEnter = () => {
+    const el = ref.current;
+    if (!el) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+
+    gsap.context(() => {
+      const split = new SplitText(el, { type: "chars", charsClass: "split-char inline-block" });
+      gsap.fromTo(
+        split.chars,
+        { y: 0, color: "currentColor" },
+        {
+          y: -4,
+          color: "#ff2e7a",
+          duration: 0.3,
+          stagger: { each: 0.03, from: "random" },
+          ease: "power2.out",
+          onComplete: () => split.revert(),
+        },
+      );
+    }, ref);
+  };
+
+  return (
+    <a
+      ref={ref}
+      href={href}
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+      className="flex items-center gap-2 font-street text-xl uppercase tracking-[0.1em] text-neutral-400 transition-colors hover:text-white"
+      onMouseEnter={handleMouseEnter}
+      aria-label={label}
+    >
+      <Icon size={18} />
+      <span>{label}</span>
+    </a>
+  );
+}
 
 export function Footer() {
   return (
@@ -26,18 +80,42 @@ export function Footer() {
       <span className="pointer-events-none absolute -left-20 top-10 h-56 w-56 rounded-full bg-candy-pink/20 blur-3xl" />
       <span className="pointer-events-none absolute -right-20 bottom-0 h-56 w-56 rounded-full bg-ocean/20 blur-3xl" />
 
-      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
-          <div>
-            <a href="#" className="flex items-center" aria-label="buggy ruggy — inicio">
-              <BuggyRuggyLogo imgClassName="h-14" />
-            </a>
-            <p className="mt-5 max-w-xs text-sm font-semibold leading-relaxed text-neutral-400">
-              Alfombras que <span className="text-candy-pink">pintan sonrisas</span>.
-              Tufting a mano, color sin límites y mucha actitud callejera.
-            </p>
-          </div>
+      {/* Yarn toy (desktop only) */}
+      <YarnToy />
 
+      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        {/* CTA section */}
+        <div className="mb-16 text-center">
+          <h2 className="font-climate text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+            ¿List@ para tejer la tuya?
+          </h2>
+          <p className="mt-4 text-lg font-semibold text-neutral-400">
+            Reserva tu taller o pide tu diseño personalizado.{" "}
+            <span className="text-candy-pink">Sin compromiso</span>.
+          </p>
+          <div className="mt-6 flex items-center justify-center gap-4">
+            <a
+              href="#talleres"
+              className="font-street inline-flex items-center gap-2 rounded-2xl bg-candy-pink px-6 py-3 text-lg uppercase tracking-[0.1em] text-white shadow-[0_0_20px_rgba(255,46,122,0.6)] transition-all hover:scale-105"
+            >
+              Reservar Taller
+            </a>
+            <a
+              href="#contacto"
+              className="font-street inline-flex items-center gap-2 rounded-2xl border-2 border-white/80 px-6 py-3 text-lg uppercase tracking-[0.1em] text-white transition-all hover:bg-white hover:text-neutral-950"
+            >
+              Pedir Presupuesto
+            </a>
+          </div>
+        </div>
+
+        {/* Wordmark — DrawSVG */}
+        <div className="mb-12">
+          <Wordmark />
+        </div>
+
+        {/* Grid */}
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3 border-t border-white/10 pt-12">
           <div>
             <h4 className="font-street mb-4 text-xl uppercase tracking-[0.15em] text-coral">
               Servicios
@@ -71,27 +149,25 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-            <div className="mt-6 flex gap-3">
-              <a
-                href="https://www.instagram.com/buggy.ruggy"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-candy-pink transition-all hover:scale-110 hover:border-candy-pink hover:bg-candy-pink hover:text-white hover:shadow-[0_0_18px_rgba(255,46,122,0.6)]"
-                aria-label="Instagram"
-              >
-                <Instagram size={18} />
-              </a>
-              <a
-                href="mailto:hola@buggyruggy.com"
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-ocean transition-all hover:scale-110 hover:border-ocean hover:bg-ocean hover:text-white hover:shadow-[0_0_18px_rgba(0,180,216,0.6)]"
-                aria-label="Email"
-              >
-                <Mail size={18} />
-              </a>
+            {/* Sevilla live clock */}
+            <div className="mt-4 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-bold">
+              <SevillaClock />
+            </div>
+          </div>
+
+          <div>
+            <h4 className="font-street mb-4 text-xl uppercase tracking-[0.15em] text-grape">
+              Síguenos
+            </h4>
+            <div className="space-y-4">
+              {footerLinks.social.map((s) => (
+                <SocialLink key={s.label} {...s} />
+              ))}
             </div>
           </div>
         </div>
 
+        {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 sm:flex-row">
           <p className="text-xs font-semibold text-neutral-500">
             &copy; {new Date().getFullYear()} buggy ruggy. Hecho con{" "}

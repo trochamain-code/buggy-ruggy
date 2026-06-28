@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import { Calendar, Clock, Users, ChevronRight, Star, Paintbrush } from "lucide-react";
+import { SplitText } from "@/components/ui/SplitText";
 import {
   Dialog,
   DialogHeader,
@@ -82,12 +83,12 @@ export function Workshops() {
           <span className="inline-flex items-center gap-2 rounded-full bg-sun-light px-4 py-1.5 text-sm font-extrabold text-sun">
             <Paintbrush size={16} /> Talleres Creativos
           </span>
-          <h2 className="mt-6 text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl">
-            Aprende, crea,{' '}
+          <SplitText className="mt-6 text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl">
+            Aprende, crea,{" "}
             <span className="bg-gradient-to-r from-coral via-candy-pink to-grape bg-clip-text text-transparent">
               ensúciate las manos
             </span>
-          </h2>
+          </SplitText>
           <p className="mt-4 text-lg font-semibold leading-relaxed text-neutral-500">
             Talleres presenciales donde{' '}
             <span className="text-coral">te diviertes</span> y te llevas tu

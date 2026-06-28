@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { Palette, Ruler, Sparkles, Heart, ArrowRight } from "lucide-react";
 import { asset } from "@/lib/utils";
+import { SplitText } from "@/components/ui/SplitText";
 
 const features = [
   {
@@ -73,14 +74,12 @@ export function CustomDesign() {
             <span className="inline-flex items-center gap-2 rounded-full bg-berry-light px-4 py-1.5 text-sm font-extrabold text-berry">
               <Palette size={16} /> Diseño a Medida
             </span>
-            <h2 className="mt-6 text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl">
-              Tu alfombra,{' '}
-              <span className="relative">
-                <span className="bg-gradient-to-r from-candy-pink via-berry to-grape bg-clip-text text-transparent">
-                  tu personalidad
-                </span>
+            <SplitText className="mt-6 text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl">
+              Tu alfombra,{" "}
+              <span className="bg-gradient-to-r from-candy-pink via-berry to-grape bg-clip-text text-transparent">
+                tu personalidad
               </span>
-            </h2>
+            </SplitText>
             <p className="mt-4 text-lg font-semibold leading-relaxed text-neutral-500">
               Aburrirse está prohibido. Diseñamos alfombras que{' '}
               <span className="text-coral">gritan color</span> y cuentan{' '}

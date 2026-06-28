@@ -25,9 +25,8 @@
 }
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
+  /* Smooth scrolling is handled by GSAP ScrollSmoother (see useScrollSmoother),
+     so the native CSS smooth behavior is intentionally omitted to avoid conflicts. */
 
   body {
     @apply bg-white text-neutral-800;
