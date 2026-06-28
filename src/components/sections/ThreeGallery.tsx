@@ -2,10 +2,12 @@ import { useRef, useEffect } from "react";
 import * as THREE from "three";
 import { galleryImages } from "@/lib/data";
 
-const IMAGE_HEIGHT = 90;
-const IMAGE_GAP = 16;
-const MAX_IMAGE_WIDTH = 280;
-const BAND_HEIGHT = 110;
+const IMAGE_HEIGHT = 180;
+const IMAGE_GAP = 48;
+const MAX_IMAGE_WIDTH = 500;
+const BAND_HEIGHT = 220;
+const IMAGE_RADIUS = 14;
+const SHADOW_OFFSET = 4;
 
 const BANDS = 8;
 const IMAGES_PER_BAND = [11, 12, 11, 12, 12, 11, 12, 12]; // ~93 images across 8 bands
@@ -38,17 +40,33 @@ function createTextureForBand(bandIndex: number): Promise<BandResult> {
       img.crossOrigin = "anonymous";
       img.onload = () => {
         const ratio = img.naturalWidth / img.naturalHeight;
-        let w = Math.round(IMAGE_HEIGHT * ratio);
-        let h = IMAGE_HEIGHT;
-        if (w > MAX_IMAGE_WIDTH) {
-          w = MAX_IMAGE_WIDTH;
-          h = Math.round(w / ratio);
+        let w: number, h: number;
+        if (ratio >= 1) {
+          h = IMAGE_HEIGHT;
+          w = Math.round(h * ratio);
+          if (w > MAX_IMAGE_WIDTH) { w = MAX_IMAGE_WIDTH; h = Math.round(w / ratio); }
+        } else {
+          w = Math.round(BAND_HEIGHT * ratio);
+          h = BAND_HEIGHT;
+          if (w < 80) { w = 80; h = Math.round(w / ratio); }
         }
         imgData.push({ img, width: w, height: h });
         loaded++;
         if (loaded === images.length) drawBand();
       };
       img.onerror = () => {
+        // Fallback: colored placeholder
+        const c = document.createElement("canvas");
+        c.width = 120; c.height = 180;
+        const cx = c.getContext("2d")!;
+        cx.fillStyle = `hsl(${(bandIndex * 45) % 360}, 60%, 70%)`;
+        cx.fillRect(0, 0, 120, 180);
+        cx.fillStyle = "#fff";
+        cx.font = "bold 14px sans-serif";
+        cx.textAlign = "center";
+        cx.fillText("buggy", 60, 85);
+        cx.fillText("ruggy", 60, 105);
+        imgData.push({ img: c as unknown as HTMLImageElement, width: 120, height: 180 });
         loaded++;
         if (loaded === images.length) drawBand();
       };
@@ -71,8 +89,52 @@ function createTextureForBand(bandIndex: number): Promise<BandResult> {
       for (let c = 0; c < CLONE_COUNT; c++) {
         for (const d of imgData) {
           const cy = (BAND_HEIGHT - d.height) / 2;
-          ctx.globalAlpha = 0.92;
+          ctx.save();
+          // Manual rounded rect path (broad browser support)
+          const r = IMAGE_RADIUS;
+          const rx = x, ry = cy, rw = d.width, rh = d.height;
+          ctx.beginPath();
+          ctx.moveTo(rx + r, ry);
+          ctx.lineTo(rx + rw - r, ry);
+          ctx.quadraticCurveTo(rx + rw, ry, rx + rw, ry + r);
+          ctx.lineTo(rx + rw, ry + rh - r);
+          ctx.quadraticCurveTo(rx + rw, ry + rh, rx + rw - r, ry + rh);
+          ctx.lineTo(rx + r, ry + rh);
+          ctx.quadraticCurveTo(rx, ry + rh, rx, ry + rh - r);
+          ctx.lineTo(rx, ry + r);
+          ctx.quadraticCurveTo(rx, ry, rx + r, ry);
+          ctx.closePath();
+          // Shadow behind image
+          ctx.shadowColor = "rgba(0,0,0,0.45)";
+          ctx.shadowBlur = 10;
+          ctx.shadowOffsetX = 3;
+          ctx.shadowOffsetY = 5;
+          ctx.fillStyle = "rgba(0,0,0,0.3)";
+          ctx.fill();
+          // Clip and draw image
+          ctx.clip();
+          ctx.shadowColor = "transparent";
+          ctx.shadowBlur = 0;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 0;
+          ctx.globalAlpha = 1;
           ctx.drawImage(d.img, x, cy, d.width, d.height);
+          ctx.restore();
+          // Subtle white border
+          ctx.strokeStyle = "rgba(255,255,255,0.12)";
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(rx + r, ry);
+          ctx.lineTo(rx + rw - r, ry);
+          ctx.quadraticCurveTo(rx + rw, ry, rx + rw, ry + r);
+          ctx.lineTo(rx + rw, ry + rh - r);
+          ctx.quadraticCurveTo(rx + rw, ry + rh, rx + rw - r, ry + rh);
+          ctx.lineTo(rx + r, ry + rh);
+          ctx.quadraticCurveTo(rx, ry + rh, rx, ry + rh - r);
+          ctx.lineTo(rx, ry + r);
+          ctx.quadraticCurveTo(rx, ry, rx + r, ry);
+          ctx.closePath();
+          ctx.stroke();
           x += d.width + IMAGE_GAP;
         }
       }
@@ -101,6 +163,7 @@ uniform float uOffsetY;
 uniform float uRotation;
 uniform float uBandIndex;
 uniform float uCurveAmount;
+uniform float uScale;
 
 varying vec2 vUv;
 
@@ -116,9 +179,10 @@ void main() {
   float curve = 4.0 * (nx - 0.5) * (nx - 0.5);
   float curveOffset = (0.5 - curve) * uCurveAmount;
 
-  float bandTop = (uResolution.y - 110.0) * 0.5 + uOffsetY + curveOffset;
-  float bandBottom = bandTop + 110.0;
-  float bandCenterY = bandTop + 55.0;
+  float bandH = 220.0 * uScale;
+  float bandTop = (uResolution.y - bandH) * 0.5 + uOffsetY + curveOffset;
+  float bandBottom = bandTop + bandH;
+  float bandCenterY = bandTop + bandH * 0.5;
 
   // Rotation
   vec2 rc = vec2(uResolution.x * 0.5, bandCenterY);
@@ -158,17 +222,18 @@ interface BandConfig {
   speed: number;
   rotation: number;
   curveAmount: number;
+  scale: number;
 }
 
 const bandConfigs: BandConfig[] = [
-  { offsetY: -195, speed: 0.8, rotation: 0.12, curveAmount: 30 },
-  { offsetY: -135, speed: 1.1, rotation: -0.08, curveAmount: 35 },
-  { offsetY: -75, speed: 1.4, rotation: 0.1, curveAmount: 28 },
-  { offsetY: -15, speed: 0.6, rotation: -0.06, curveAmount: 32 },
-  { offsetY: 45, speed: 0.9, rotation: 0.07, curveAmount: 30 },
-  { offsetY: 105, speed: 1.2, rotation: -0.1, curveAmount: 34 },
-  { offsetY: 165, speed: 0.7, rotation: 0.09, curveAmount: 28 },
-  { offsetY: 225, speed: 1.5, rotation: -0.07, curveAmount: 36 },
+  { offsetY: -450, speed: 0.8, rotation: 0.12, curveAmount: 30, scale: 1.28 },
+  { offsetY: -300, speed: 1.1, rotation: -0.08, curveAmount: 35, scale: 1.20 },
+  { offsetY: -160, speed: 1.4, rotation: 0.1, curveAmount: 28, scale: 1.12 },
+  { offsetY: -30, speed: 0.6, rotation: -0.06, curveAmount: 32, scale: 1.05 },
+  { offsetY: 100, speed: 0.9, rotation: 0.07, curveAmount: 30, scale: 0.98 },
+  { offsetY: 240, speed: 1.2, rotation: -0.1, curveAmount: 34, scale: 0.90 },
+  { offsetY: 390, speed: 0.7, rotation: 0.09, curveAmount: 28, scale: 0.82 },
+  { offsetY: 550, speed: 1.5, rotation: -0.07, curveAmount: 36, scale: 0.74 },
 ];
 
 export function ThreeGallery() {
@@ -192,7 +257,7 @@ export function ThreeGallery() {
     camera.position.z = 1;
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
     renderer.domElement.style.position = "absolute";
     renderer.domElement.style.top = "0";
@@ -224,6 +289,7 @@ export function ThreeGallery() {
             uRotation: { value: config.rotation },
             uBandIndex: { value: i },
             uCurveAmount: { value: config.curveAmount },
+            uScale: { value: config.scale },
           },
           vertexShader: vertShader,
           fragmentShader: fragShader,
@@ -306,9 +372,10 @@ export function ThreeGallery() {
     window.addEventListener("keydown", onKeyDown);
 
     const resize = () => {
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      const h = container.clientHeight;
+      renderer.setSize(window.innerWidth, h);
       for (const mat of materialsRef.current) {
-        mat.uniforms.uResolution!.value.set(window.innerWidth, window.innerHeight);
+        mat.uniforms.uResolution!.value.set(window.innerWidth, h);
       }
     };
     window.addEventListener("resize", resize);
@@ -325,7 +392,7 @@ export function ThreeGallery() {
       scrollRef.current += (targetRef.current - scrollRef.current) * smoothing;
       for (const mat of materialsRef.current) {
         mat.uniforms.uScroll!.value = scrollRef.current;
-        mat.uniforms.uResolution!.value.set(window.innerWidth, window.innerHeight);
+        mat.uniforms.uResolution!.value.set(container.clientWidth, container.clientHeight);
       }
       renderer.render(scene, camera);
       rafRef.current = requestAnimationFrame(animate);
@@ -359,7 +426,7 @@ export function ThreeGallery() {
     <section
       id="galeria"
       ref={containerRef}
-      className="relative h-svh w-full overflow-hidden bg-[#0a1a2a]"
+      className="relative h-[200svh] w-full overflow-hidden bg-[#0a1a2a]"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-[#0a1a2a] to-transparent h-20" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-[#0a1a2a] to-transparent h-20" />
