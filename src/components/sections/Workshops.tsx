@@ -96,9 +96,10 @@ export function Workshops() {
             </span>
             <SplitText className="mt-6 text-4xl font-extrabold tracking-tight text-neutral-900 sm:text-5xl lg:text-6xl">
               Aprende, crea,{" "}
-              <span className="bg-gradient-to-r from-coral via-candy-pink to-grape bg-clip-text text-transparent">
-                ensúciate las manos
-              </span>
+              <span className="font-climate bg-gradient-to-r from-candy-pink via-coral via-sun via-lime via-ocean to-grape bg-clip-text text-transparent">
+                ensúciate
+              </span>{" "}
+              las manos
             </SplitText>
             <p className="mt-4 text-lg font-semibold leading-relaxed text-neutral-500">
               Talleres presenciales donde{" "}
