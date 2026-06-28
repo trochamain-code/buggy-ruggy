@@ -75,6 +75,7 @@ export function SplitText({
           end: "bottom 20%",
           animation: anim,
           scrub: scrub ? 0.5 : false,
+          scroller: "#smooth-wrapper",
         });
       }
     }, ref);

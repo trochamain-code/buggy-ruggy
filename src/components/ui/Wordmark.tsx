@@ -39,6 +39,7 @@ export function Wordmark({ className }: WordmarkProps) {
             start: "top 85%",
             end: "bottom 30%",
             scrub: 0.6,
+            scroller: "#smooth-wrapper",
           },
         },
       );
