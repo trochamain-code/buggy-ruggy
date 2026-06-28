@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useLayoutEffect } from "react";
 import gsap from "gsap";
 import { Flip } from "gsap/Flip";
 import { X } from "lucide-react";
@@ -19,80 +19,121 @@ const cols = galleryImages
 
 export function InfiniteGallery() {
   const [lightbox, setLightbox] = useState<number | null>(null);
-  const [exiting, setExiting] = useState(false);
   const overlayRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const thumbRefs = useRef<Map<number, HTMLDivElement>>(new Map());
 
-  const openLightbox = useCallback(
-    (imgIndex: number) => {
-      const thumb = thumbRefs.current.get(imgIndex);
-      if (!thumb) return;
-      setExiting(false);
-      const state = Flip.getState(thumb.querySelector("img")!);
-      setLightbox(imgIndex);
-      requestAnimationFrame(() => {
-        if (!imgRef.current || !overlayRef.current) return;
-        Flip.from(state, {
-          targets: imgRef.current,
-          duration: 0.5,
-          ease: "power3.inOut",
-          absolute: true,
-        });
-        gsap.fromTo(
-          overlayRef.current,
-          { opacity: 0 },
-          { opacity: 1, duration: 0.4, ease: "power2.out" },
-        );
-      });
-    },
-    [],
-  );
+  const openLightbox = useCallback((imgIndex: number) => {
+    const thumb = thumbRefs.current.get(imgIndex);
+    if (!thumb) return;
+    setLightbox(imgIndex);
+  }, []);
+
+  useLayoutEffect(() => {
+    if (lightbox === null || !imgRef.current || !overlayRef.current) return;
+    const thumb = thumbRefs.current.get(lightbox);
+    if (!thumb) return;
+    const thumbImg = thumb.querySelector("img");
+    if (!thumbImg) return;
+
+    const thumbRect = thumbImg.getBoundingClientRect();
+    const overlayRect = overlayRef.current.getBoundingClientRect();
+
+    gsap.set(imgRef.current, {
+      position: "fixed",
+      left: thumbRect.left - overlayRect.left,
+      top: thumbRect.top - overlayRect.top,
+      width: thumbRect.width,
+      height: thumbRect.height,
+      margin: 0,
+      borderRadius: "16px",
+      objectFit: "cover",
+    });
+
+    gsap.fromTo(
+      overlayRef.current,
+      { opacity: 0 },
+      { opacity: 1, duration: 0.4, ease: "power2.out" },
+    );
+
+    gsap.to(imgRef.current, {
+      left: "50%",
+      top: "50%",
+      xPercent: -50,
+      yPercent: -50,
+      width: "auto",
+      height: "auto",
+      maxWidth: "90vw",
+      maxHeight: "85vh",
+      objectFit: "contain",
+      borderRadius: "20px",
+      duration: 0.55,
+      ease: "power3.inOut",
+    });
+
+    return () => {
+      gsap.killTweensOf(imgRef.current);
+    };
+  }, [lightbox]);
 
   const closeLightbox = useCallback(() => {
-    const thumb = thumbRefs.current.get(lightbox ?? -1);
-    setExiting(true);
-    if (!thumb || !imgRef.current || !overlayRef.current) {
+    if (lightbox === null || !imgRef.current || !overlayRef.current) {
       setLightbox(null);
       return;
     }
-    const state = Flip.getState(thumb.querySelector("img")!);
+    const thumb = thumbRefs.current.get(lightbox);
+    const thumbImg = thumb?.querySelector("img");
+
     gsap.to(overlayRef.current, {
       opacity: 0,
       duration: 0.35,
       ease: "power2.in",
     });
-    Flip.from(state, {
-      targets: imgRef.current,
-      duration: 0.5,
-      ease: "power3.inOut",
-      absolute: true,
-      onComplete: () => setLightbox(null),
-    });
+
+    if (thumbImg && imgRef.current) {
+      const thumbRect = thumbImg.getBoundingClientRect();
+      gsap.to(imgRef.current, {
+        left: thumbRect.left,
+        top: thumbRect.top,
+        xPercent: 0,
+        yPercent: 0,
+        width: thumbRect.width,
+        height: thumbRect.height,
+        borderRadius: "16px",
+        objectFit: "cover",
+        duration: 0.45,
+        ease: "power3.inOut",
+        onComplete: () => setLightbox(null),
+      });
+    } else {
+      gsap.to(imgRef.current, {
+        scale: 0.9,
+        opacity: 0,
+        duration: 0.3,
+        onComplete: () => setLightbox(null),
+      });
+    }
   }, [lightbox]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && lightbox !== null && !exiting) closeLightbox();
+      if (e.key === "Escape" && lightbox !== null) closeLightbox();
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [lightbox, exiting, closeLightbox]);
+  }, [lightbox, closeLightbox]);
 
   useEffect(() => {
-    if (lightbox !== null) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = lightbox !== null ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
   }, [lightbox]);
 
+  const lightboxSrc = lightbox !== null ? galleryImages[lightbox] : null;
+
   return (
     <section id="galeria" className="relative bg-[#0a1a2a] py-20 overflow-hidden">
-      {/* Header */}
       <div className="mb-10 text-center px-4">
         <span className="inline-flex items-center gap-2 rounded-full bg-lime/20 px-4 py-1.5 text-sm font-extrabold text-lime">
           🖼️ Galería
@@ -106,7 +147,6 @@ export function InfiniteGallery() {
         </h2>
       </div>
 
-      {/* Infinite rows */}
       <div className="space-y-3">
         {cols.map((rowIndices, rowI) => (
           <InfiniteSlider
@@ -152,8 +192,7 @@ export function InfiniteGallery() {
         ))}
       </div>
 
-      {/* Lightbox */}
-      {lightbox !== null && (
+      {lightbox !== null && lightboxSrc && (
         <div
           ref={overlayRef}
           className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl bg-neutral-950/70"
@@ -164,16 +203,16 @@ export function InfiniteGallery() {
               e.stopPropagation();
               closeLightbox();
             }}
-            className="absolute right-4 top-4 z-10 rounded-xl bg-white/10 p-3 text-white backdrop-blur-md transition-all hover:bg-white/20 hover:scale-110"
+            className="absolute right-4 top-4 z-20 rounded-xl bg-white/10 p-3 text-white backdrop-blur-md transition-all hover:bg-white/20 hover:scale-110"
             aria-label="Cerrar"
           >
             <X size={24} />
           </button>
           <img
             ref={imgRef}
-            src={galleryImages[lightbox]!.src}
-            alt={galleryImages[lightbox]!.alt}
-            className="max-h-[85vh] max-w-[90vw] rounded-2xl object-contain shadow-2xl"
+            src={lightboxSrc.src}
+            alt={lightboxSrc.alt}
+            className="pointer-events-none"
             onClick={(e) => e.stopPropagation()}
             draggable={false}
           />
