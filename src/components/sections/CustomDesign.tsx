@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Palette, ArrowRight } from "lucide-react";
+import { Palette, Ruler, Sparkles, Heart, ArrowRight } from "lucide-react";
 import { asset } from "@/lib/utils";
 import { SplitText } from "@/components/ui/SplitText";
 
@@ -9,37 +9,38 @@ gsap.registerPlugin(ScrollTrigger);
 
 const features = [
   {
-    emoji: "🎨",
+    icon: Palette,
     title: "Tú imaginas, nosotros creamos",
     description: "Cuéntanos tu idea más loca. Colores, formas, texturas. No hay límites.",
-    color: "pink",
+    bg: "bg-candy-pink-light",
+    iconBg: "bg-candy-pink",
+    text: "text-candy-pink",
   },
   {
-    emoji: "📏",
+    icon: Ruler,
     title: "Del tamaño que quieras",
     description: "Desde un pequeño tapete hasta una alfombra XXL. Hacemos cualquier medida.",
-    color: "blue",
+    bg: "bg-ocean-light",
+    iconBg: "bg-ocean",
+    text: "text-ocean",
   },
   {
-    emoji: "✨",
+    icon: Sparkles,
     title: "Materiales que molan",
-    description: "Lanas suaves, algodón orgánico y fibras recicladas. Bueno para ti y para el planeta.",
-    color: "green",
+    description: "Lanas suaves, algodón orgánico, fibras recicladas. Bueno para ti y para el planeta.",
+    bg: "bg-lime-light",
+    iconBg: "bg-lime",
+    text: "text-lime",
   },
   {
-    emoji: "♡",
+    icon: Heart,
     title: "Hecho a mano con amor",
-    description: "Cada pieza es única, tejida una a una. La imperfección es arte.",
-    color: "purple",
+    description: "Cada pieza es única, tejida una a una en nuestro taller. La imperfección es arte.",
+    bg: "bg-grape-light",
+    iconBg: "bg-grape",
+    text: "text-grape",
   },
 ];
-
-const colorMap: Record<string, { border: string; bg: string; shadow: string; iconBg: string; iconShadow: string }> = {
-  pink: { border: "before:bg-[#ff4f8a]", bg: "[#ff4f8a]", shadow: "rgba(255,79,138,0.15)", iconBg: "bg-[#ff4f8a]", iconShadow: "inset -5px -5px 10px rgba(255,255,255,0.25), inset 5px 5px 12px rgba(0,0,0,0.12), 8px 8px 18px rgba(0,0,0,0.1)" },
-  blue: { border: "before:bg-[#00b8ff]", bg: "[#00b8ff]", shadow: "rgba(0,184,255,0.15)", iconBg: "bg-[#00b8ff]", iconShadow: "inset -5px -5px 10px rgba(255,255,255,0.25), inset 5px 5px 12px rgba(0,0,0,0.12), 8px 8px 18px rgba(0,0,0,0.1)" },
-  green: { border: "before:bg-[#4cd67f]", bg: "[#4cd67f]", shadow: "rgba(76,214,127,0.15)", iconBg: "bg-[#4cd67f]", iconShadow: "inset -5px -5px 10px rgba(255,255,255,0.25), inset 5px 5px 12px rgba(0,0,0,0.12), 8px 8px 18px rgba(0,0,0,0.1)" },
-  purple: { border: "before:bg-[#b98cff]", bg: "[#b98cff]", shadow: "rgba(185,140,255,0.15)", iconBg: "bg-[#b98cff]", iconShadow: "inset -5px -5px 10px rgba(255,255,255,0.25), inset 5px 5px 12px rgba(0,0,0,0.12), 8px 8px 18px rgba(0,0,0,0.1)" },
-};
 
 export function CustomDesign() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -194,34 +195,25 @@ export function CustomDesign() {
               <span className="text-ocean">tu historia</span>.
             </p>
 
-            <div className="mt-8 grid gap-6 sm:grid-cols-2">
-              {features.map((feat) => {
-                const c = colorMap[feat.color]!;
-                return (
+            <div className="mt-8 grid gap-4 sm:grid-cols-2">
+              {features.map((feat) => (
+                <div
+                  key={feat.title}
+                  className={`feature-card rounded-3xl ${feat.bg} p-5 transition-all duration-300 hover:scale-105 hover:shadow-lg`}
+                >
                   <div
-                    key={feat.title}
-                    className={`feature-card group relative flex items-center gap-6 overflow-hidden rounded-[32px] bg-[#edf1f7] p-7 transition-all duration-300 hover:-translate-y-1.5 before:absolute before:left-0 before:top-[18px] before:bottom-[18px] before:w-2 before:rounded-[20px] ${c.border} sm:flex-row flex-col text-center sm:text-left`}
-                    style={{
-                      boxShadow: "18px 18px 35px rgba(163,177,198,0.35), -18px -18px 35px rgba(255,255,255,0.95)",
-                    }}
+                    className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${feat.iconBg} text-white`}
                   >
-                    <div
-                      className={`flex-shrink-0 flex h-[82px] w-[82px] items-center justify-center rounded-[28px] text-[34px] text-white ${c.iconBg}`}
-                      style={{ boxShadow: c.iconShadow }}
-                    >
-                      {feat.emoji}
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="mb-3 text-2xl font-bold text-[#242424]">
-                        {feat.title}
-                      </h3>
-                      <p className="text-base leading-relaxed text-[#676d7c]">
-                        {feat.description}
-                      </p>
-                    </div>
+                    <feat.icon size={18} />
                   </div>
-                );
-              })}
+                  <h3 className="text-sm font-extrabold text-neutral-900">
+                    {feat.title}
+                  </h3>
+                  <p className="mt-1 text-xs font-semibold leading-relaxed text-neutral-600">
+                    {feat.description}
+                  </p>
+                </div>
+              ))}
             </div>
 
             <div className="cta-btn mt-8">
